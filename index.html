@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NANIMONO SALES AGENT - AGI営業知能プラットフォーム</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&display=swap');
+
+  :root {
+    --graphite-900: #1a1a1a;
+    --graphite-800: #2d2d2d;
+    --graphite-700: #3d3d3d;
+    --graphite-600: #4a4a4a;
+    --graphite-500: #5c5c5c;
+    --graphite-400: #7a7a7a;
+    --graphite-300: #9a9a9a;
+    --graphite-200: #c0c0c0;
+    --graphite-100: #e0e0e0;
+    --graphite-50: #f2f2f2;
+    --accent: #c8a96e;
+    --accent-light: #dfc89a;
+    --accent-dark: #a8894e;
+    --white: #ffffff;
+    --bg: #fafafa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+  }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    color: var(--graphite-800);
+    background: var(--bg);
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(160deg, var(--graphite-900) 0%, var(--graphite-700) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 30% 50%, rgba(200,169,110,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(200,169,110,0.04) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 6px 20px;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-company {
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--graphite-300);
+    letter-spacing: 0.3em;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-title {
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 900;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    line-height: 1.3;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-title span {
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    font-weight: 300;
+    color: var(--graphite-200);
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-desc {
+    max-width: 720px;
+    font-size: 0.95rem;
+    color: var(--graphite-300);
+    line-height: 2;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-line {
+    width: 60px;
+    height: 1px;
+    background: var(--accent);
+    margin: 40px auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--graphite-400);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    z-index: 1;
+  }
+
+  .hero-scroll::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 40px;
+    background: var(--graphite-500);
+    margin: 12px auto 0;
+    animation: scrollDown 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollDown {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.5); }
+    50% { opacity: 1; transform: scaleY(1); }
+  }
+
+  /* ===== SECTIONS ===== */
+  .section {
+    padding: 100px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-dark {
+    background: var(--graphite-900);
+    color: var(--white);
+    max-width: 100%;
+    padding: 100px 24px;
+  }
+
+  .section-dark .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-accent {
+    background: var(--graphite-800);
+    color: var(--white);
+    max-width: 100%;
+    padding: 100px 24px;
+  }
+
+  .section-accent .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .section-title {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 700;
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+    color: var(--graphite-400);
+    margin-bottom: 60px;
+    max-width: 680px;
+  }
+
+  .section-dark .section-subtitle,
+  .section-accent .section-subtitle {
+    color: var(--graphite-300);
+  }
+
+  /* ===== CONCEPT ===== */
+  .concept-text {
+    font-size: 1.05rem;
+    line-height: 2.2;
+    color: var(--graphite-600);
+    max-width: 800px;
+  }
+
+  .concept-text strong {
+    color: var(--graphite-900);
+    font-weight: 600;
+  }
+
+  .concept-highlight {
+    background: linear-gradient(to right, var(--accent-light), transparent);
+    padding: 24px 32px;
+    border-left: 3px solid var(--accent);
+    margin: 40px 0;
+    font-size: 1.05rem;
+    color: var(--graphite-800);
+    line-height: 2;
+  }
+
+  /* ===== INPUT DATA ===== */
+  .input-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+  }
+
+  .input-card {
+    background: var(--graphite-800);
+    border: 1px solid var(--graphite-700);
+    padding: 36px 28px;
+    transition: border-color 0.3s;
+  }
+
+  .input-card:hover {
+    border-color: var(--accent);
+  }
+
+  .input-card-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    border: 1px solid var(--accent-dark);
+    padding: 3px 10px;
+    margin-bottom: 16px;
+  }
+
+  .input-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--white);
+  }
+
+  .input-card-desc {
+    font-size: 0.85rem;
+    color: var(--graphite-300);
+    line-height: 1.8;
+  }
+
+  /* ===== FEATURES ===== */
+  .feature-block {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 0 32px;
+    margin-bottom: 56px;
+    padding-bottom: 56px;
+    border-bottom: 1px solid var(--graphite-100);
+  }
+
+  .feature-block:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .feature-num {
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    text-align: center;
+  }
+
+  .feature-num-label {
+    font-size: 0.6rem;
+    color: var(--graphite-400);
+    letter-spacing: 0.1em;
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  .feature-name {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--accent-dark);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  .feature-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--graphite-900);
+  }
+
+  .feature-desc {
+    font-size: 0.95rem;
+    color: var(--graphite-600);
+    line-height: 2;
+    margin-bottom: 16px;
+  }
+
+  .feature-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    background: var(--graphite-50);
+    color: var(--graphite-600);
+    padding: 4px 12px;
+    margin-right: 8px;
+    margin-bottom: 6px;
+    border: 1px solid var(--graphite-100);
+  }
+
+  .feature-tag.auto {
+    background: rgba(200,169,110,0.1);
+    color: var(--accent-dark);
+    border-color: var(--accent-light);
+  }
+
+  /* ===== CYCLE ===== */
+  .cycle-diagram {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 48px 0;
+  }
+
+  .cycle-node {
+    background: var(--graphite-700);
+    border: 1px solid var(--graphite-600);
+    padding: 20px 24px;
+    text-align: center;
+    min-width: 160px;
+    transition: border-color 0.3s;
+  }
+
+  .cycle-node:hover {
+    border-color: var(--accent);
+  }
+
+  .cycle-node-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .cycle-node-desc {
+    font-size: 0.7rem;
+    color: var(--graphite-300);
+  }
+
+  .cycle-arrow {
+    font-size: 1.2rem;
+    color: var(--accent);
+    font-weight: 300;
+  }
+
+  /* ===== MANAGEMENT ===== */
+  .mgmt-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  @media (max-width: 640px) {
+    .mgmt-grid { grid-template-columns: 1fr; }
+  }
+
+  .mgmt-card {
+    border: 1px solid var(--graphite-100);
+    padding: 40px 32px;
+    background: var(--white);
+  }
+
+  .mgmt-card-icon {
+    font-size: 1.8rem;
+    margin-bottom: 16px;
+  }
+
+  .mgmt-card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .mgmt-card-desc {
+    font-size: 0.9rem;
+    color: var(--graphite-500);
+    line-height: 1.9;
+  }
+
+  /* ===== SECURITY ===== */
+  .security-list {
+    list-style: none;
+  }
+
+  .security-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--graphite-700);
+    font-size: 0.95rem;
+    color: var(--graphite-200);
+    line-height: 1.8;
+  }
+
+  .security-list li:last-child {
+    border-bottom: none;
+  }
+
+  .security-icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--accent-dark);
+    color: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  /* ===== DISCLAIMER ===== */
+  .disclaimer {
+    background: var(--graphite-50);
+    border: 1px solid var(--graphite-100);
+    padding: 32px;
+    margin-top: 60px;
+    font-size: 0.8rem;
+    color: var(--graphite-500);
+    line-height: 1.8;
+  }
+
+  .disclaimer-title {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--graphite-400);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    background: var(--graphite-900);
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--graphite-400);
+  }
+
+  .footer-company {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .footer-sub {
+    font-size: 0.75rem;
+    color: var(--graphite-500);
+    letter-spacing: 0.15em;
+    margin-bottom: 24px;
+  }
+
+  .footer-line {
+    width: 40px;
+    height: 1px;
+    background: var(--graphite-700);
+    margin: 0 auto 24px;
+  }
+
+  .footer-copy {
+    font-size: 0.7rem;
+    color: var(--graphite-600);
+  }
+
+  /* ===== NAV ===== */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(26,26,26,0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 0 32px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--graphite-800);
+  }
+
+  .nav-logo {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.1em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--graphite-400);
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover {
+    color: var(--accent);
+  }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .feature-block { grid-template-columns: 1fr; }
+    .feature-num { text-align: left; margin-bottom: 12px; }
+    .feature-num-label { text-align: left; }
+    .cycle-diagram { flex-direction: column; }
+    .cycle-arrow { transform: rotate(90deg); }
+  }
+
+  /* ===== PRINT / PDF ===== */
+  @media print {
+    .nav { display: none; }
+    .hero-scroll { display: none; }
+
+    /* Hero = 1ページ目 */
+    .hero {
+      min-height: auto;
+      height: 100vh;
+      padding: 60px 24px;
+      page-break-after: always;
+      break-after: page;
+    }
+
+    /* 各セクションの先頭でページ区切り */
+    .section,
+    .section-dark,
+    .section-accent {
+      padding: 64px 24px;
+      page-break-before: always;
+      break-before: page;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    /* Feature 03 (Daily-Insight) の前でページ区切り */
+    .feature-block:nth-child(3) {
+      page-break-before: always;
+      break-before: page;
+      padding-top: 20px;
+    }
+
+    /* Feature 05 (Lost-Analysis) の前でページ区切り */
+    .feature-block:nth-child(5) {
+      page-break-before: always;
+      break-before: page;
+      padding-top: 20px;
+    }
+
+    /* カード・ブロックの途中で切れないように */
+    .feature-block,
+    .input-card,
+    .mgmt-card,
+    .cycle-diagram,
+    .concept-highlight,
+    .disclaimer {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .security-list li {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    /* フッターは最終ページに */
+    .footer {
+      page-break-before: always;
+      break-before: page;
+      padding: 40px 24px;
+    }
+
+    /* Disclaimer セクションはフッターと同じページに */
+    .section:last-of-type {
+      page-break-before: always;
+      break-before: page;
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">NANIMONO</div>
+  <ul class="nav-links">
+    <li><a href="#concept">Concept</a></li>
+    <li><a href="#data">Data</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#management">Management</a></li>
+    <li><a href="#security">Security</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Confidential - Sales Document</div>
+  <p class="hero-company">株式会社NANIMONO</p>
+  <h1 class="hero-title">NANIMONO<br><span>SALES AGENT</span></h1>
+  <p class="hero-sub">AGI営業知能プラットフォーム</p>
+  <div class="hero-line"></div>
+  <p class="hero-desc">
+    トップ営業マンの思考と経験をデジタル化し、<br>
+    組織全員で共有・増幅させるための知能インフラ。
+  </p>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- CONCEPT -->
+<section class="section" id="concept">
+  <p class="section-label">01 — Concept</p>
+  <h2 class="section-title">プロジェクトの全体像</h2>
+  <p class="section-subtitle">自律成長する営業インテリジェンス</p>
+
+  <div class="concept-text">
+    <p>
+      本システムは、単なるマニュアル検索機ではありません。
+    </p>
+    <br>
+    <p>
+      現場の<strong>「商談録音」</strong>や<strong>「日報」</strong>から、
+      勝てる理由（成功法則）と負ける理由（課題）をAIが自動で抽出。
+      教材やスクリプトへ<strong>リアルタイムに変換し続ける</strong>、
+      自律成長型のプラットフォームです。
+    </p>
+  </div>
+
+  <div class="concept-highlight">
+    営業組織の知見を<strong>蓄積 → 分析 → 変換 → 共有</strong>するサイクルを自動化し、<br>
+    組織全体の営業力を継続的に底上げします。
+  </div>
+</section>
+
+<!-- INPUT DATA -->
+<section class="section-dark" id="data">
+  <div class="section-inner">
+    <p class="section-label">02 — Input Data</p>
+    <h2 class="section-title">構築に必要なインプットデータ</h2>
+    <p class="section-subtitle">4つのデータソースが、知能基盤の精度を決定します。</p>
+
+    <div class="input-grid">
+      <div class="input-card">
+        <span class="input-card-tag">Theory</span>
+        <h3 class="input-card-title">商材・キャンペーン資料</h3>
+        <p class="input-card-desc">
+          PDF/PPT形式の商品資料。正確な商品知識、最新のプラン、約款をAIの知識基盤として投入。
+        </p>
+      </div>
+
+      <div class="input-card">
+        <span class="input-card-tag">Technique</span>
+        <h3 class="input-card-title">トップ営業の商談録音</h3>
+        <p class="input-card-desc">
+          成果を出している人の「話し方」「切り返し」「間の取り方」を音声から自動解析。
+        </p>
+      </div>
+
+      <div class="input-card">
+        <span class="input-card-tag">Experience</span>
+        <h3 class="input-card-title">過去の日報・Q&A履歴</h3>
+        <p class="input-card-desc">
+          現場で実際に起きたトラブル、顧客からの鋭い質問、それへの回答をテキストで蓄積。
+        </p>
+      </div>
+
+      <div class="input-card">
+        <span class="input-card-tag">Structure</span>
+        <h3 class="input-card-title">顧客ターゲットリスト</h3>
+        <p class="input-card-desc">
+          どの業種・属性の顧客に、どの商材を売るべきかの定義。戦略の骨格を構築。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <p class="section-label">03 — Core Features</p>
+  <h2 class="section-title">目的別5大機能</h2>
+  <p class="section-subtitle">
+    選択した商材ごとに、以下の機能が連動し「ナレッジ循環サイクル」を形成します。
+  </p>
+
+  <div class="feature-block">
+    <div>
+      <div class="feature-num">01</div>
+      <div class="feature-num-label">FEATURE</div>
+    </div>
+    <div>
+      <p class="feature-name">Quick-FAQ</p>
+      <h3 class="feature-title">基本知識チャットbot</h3>
+      <p class="feature-desc">
+        商材資料に基づいた正確な回答を即時提供。
+        後述の「深掘り」で得られた新しい知見が、自動で「最新FAQ」としてここに反映されます。
+        常に最新の情報にアップデートされ続ける、生きたナレッジベースです。
+      </p>
+      <span class="feature-tag">即時回答</span>
+      <span class="feature-tag">資料ベース</span>
+      <span class="feature-tag auto">自動更新</span>
+    </div>
+  </div>
+
+  <div class="feature-block">
+    <div>
+      <div class="feature-num">02</div>
+      <div class="feature-num-label">FEATURE</div>
+    </div>
+    <div>
+      <p class="feature-name">Closing-AI</p>
+      <h3 class="feature-title">営業ノウハウチャットbot</h3>
+      <p class="feature-desc">
+        ターゲット別のスクリプト生成、反論処理を支援。
+        録音分析で判明した「今、最も刺さるフレーズ」が自動で「成功事例集」として格上げされ、
+        スクリプトに組み込まれます。組織の勝ちパターンが常に進化し続けます。
+      </p>
+      <span class="feature-tag">スクリプト生成</span>
+      <span class="feature-tag">反論処理</span>
+      <span class="feature-tag auto">成功事例自動反映</span>
+    </div>
+  </div>
+
+  <div class="feature-block">
+    <div>
+      <div class="feature-num">03</div>
+      <div class="feature-num-label">FEATURE</div>
+    </div>
+    <div>
+      <p class="feature-name">Daily-Insight</p>
+      <h3 class="feature-title">日報・深掘りコーチング</h3>
+      <p class="feature-desc">
+        入力された日報に対し、AIが「なぜ失注した？」「顧客の反応のどの部分に違和感があった？」と
+        執拗に深掘り質問を実施。この対話から得られた「現場の教訓」を自動で整理し、
+        「成功・失敗事例集」としてデータベースに格上げ保存。組織全体に共有します。
+      </p>
+      <span class="feature-tag">AI深掘り質問</span>
+      <span class="feature-tag">コーチング</span>
+      <span class="feature-tag auto">教訓の自動ナレッジ化</span>
+    </div>
+  </div>
+
+  <div class="feature-block">
+    <div>
+      <div class="feature-num">04</div>
+      <div class="feature-num-label">FEATURE</div>
+    </div>
+    <div>
+      <p class="feature-name">Roleplay-Studio</p>
+      <h3 class="feature-title">AIロールプレイング特訓モード</h3>
+      <p class="feature-desc">
+        失注分析の結果（個人の弱点）をAIが学習。
+        「あなたが昨日、失注したのと同じパターンの顧客」をAIが演じ、
+        克服できるまで何度でも特訓。実践に最も近いシミュレーション環境を提供します。
+      </p>
+      <span class="feature-tag">弱点特化型</span>
+      <span class="feature-tag">実践シミュレーション</span>
+      <span class="feature-tag auto">個別最適化</span>
+    </div>
+  </div>
+
+  <div class="feature-block">
+    <div>
+      <div class="feature-num">05</div>
+      <div class="feature-num-label">FEATURE</div>
+    </div>
+    <div>
+      <p class="feature-name">Lost-Analysis</p>
+      <h3 class="feature-title">録音・失注分析</h3>
+      <p class="feature-desc">
+        音声から「声のトーン」「自信のなさ」「説明不足」を特定。
+        全体の失注理由を統計化し、管理画面へ「今、組織としてこの知識が不足している」と
+        アラートを出力。個人と組織、両方の課題を可視化します。
+      </p>
+      <span class="feature-tag">音声解析</span>
+      <span class="feature-tag">失注理由の統計化</span>
+      <span class="feature-tag auto">組織課題アラート</span>
+    </div>
+  </div>
+</section>
+
+<!-- KNOWLEDGE CYCLE -->
+<section class="section-accent">
+  <div class="section-inner">
+    <p class="section-label">04 — Knowledge Cycle</p>
+    <h2 class="section-title">ナレッジ循環サイクル</h2>
+    <p class="section-subtitle">5つの機能が連動し、組織の知見が自律的に成長し続けます。</p>
+
+    <div class="cycle-diagram">
+      <div class="cycle-node">
+        <div class="cycle-node-title">商談実施</div>
+        <div class="cycle-node-desc">録音 / 日報入力</div>
+      </div>
+      <span class="cycle-arrow">&#x2192;</span>
+      <div class="cycle-node">
+        <div class="cycle-node-title">AI分析</div>
+        <div class="cycle-node-desc">成功要因 / 失注要因</div>
+      </div>
+      <span class="cycle-arrow">&#x2192;</span>
+      <div class="cycle-node">
+        <div class="cycle-node-title">ナレッジ化</div>
+        <div class="cycle-node-desc">FAQ / 事例集 更新</div>
+      </div>
+      <span class="cycle-arrow">&#x2192;</span>
+      <div class="cycle-node">
+        <div class="cycle-node-title">トレーニング</div>
+        <div class="cycle-node-desc">ロープレ / コーチング</div>
+      </div>
+      <span class="cycle-arrow">&#x2192;</span>
+      <div class="cycle-node">
+        <div class="cycle-node-title">次の商談へ</div>
+        <div class="cycle-node-desc">スキル向上</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MANAGEMENT -->
+<section class="section" id="management">
+  <p class="section-label">05 — Management</p>
+  <h2 class="section-title">経営・マネジメント層向け</h2>
+  <p class="section-subtitle">組織の営業力をデータで可視化し、的確な意思決定を支援します。</p>
+
+  <div class="mgmt-grid">
+    <div class="mgmt-card">
+      <div class="mgmt-card-icon">&#9632;</div>
+      <h3 class="mgmt-card-title">組織ヒートマップ</h3>
+      <p class="mgmt-card-desc">
+        どのメンバー・代理店が、どのフェーズでつまづいているかをヒートマップで可視化。
+        弱点の分布が一目で把握でき、的確なリソース配分が可能になります。
+      </p>
+    </div>
+
+    <div class="mgmt-card">
+      <div class="mgmt-card-icon">&#9670;</div>
+      <h3 class="mgmt-card-title">AIレコメンド</h3>
+      <p class="mgmt-card-desc">
+        「B店には、この新しい失敗事例集を読ませて、ロープレ③を重点的にやらせるべき」
+        ——AIが具体的なアクション指示を自動生成。マネジメントの属人化を排除します。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section class="section-dark" id="security">
+  <div class="section-inner">
+    <p class="section-label">06 — Security</p>
+    <h2 class="section-title">代理店向けリスクヘッジ</h2>
+    <p class="section-subtitle">情報資産を守る多層防御を標準実装。</p>
+
+    <ul class="security-list">
+      <li>
+        <span class="security-icon">01</span>
+        <div>
+          <strong style="color: var(--white);">権限階層制御</strong><br>
+          代理店ランクにより閲覧可能な情報レベルを制限。
+          機密性の高い営業ノウハウやスクリプトを段階的に開示します。
+        </div>
+      </li>
+      <li>
+        <span class="security-icon">02</span>
+        <div>
+          <strong style="color: var(--white);">透かし埋め込み</strong><br>
+          表示される全コンテンツにユーザーIDの電子透かしを不可視レベルで埋め込み。
+          流出元の特定を即座に可能にします。
+        </div>
+      </li>
+      <li>
+        <span class="security-icon">03</span>
+        <div>
+          <strong style="color: var(--white);">コピペ検知・即時停止</strong><br>
+          不正なコピー&ペースト操作を検知した場合、
+          該当アカウントを即時停止。情報流出を未然に防ぎます。
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- DISCLAIMER -->
+<section class="section">
+  <p class="section-label">07 — Disclaimer</p>
+  <h2 class="section-title">免責・ご留意事項</h2>
+
+  <div class="disclaimer">
+    <p class="disclaimer-title">Important Notice</p>
+    <p>
+      本システムが提供する全ての回答・分析結果には、以下の免責事項が適用されます。<br><br>
+      ※サービスやキャンペーンの内容は随時変更される可能性があります。
+      最新データは必ず弊社担当者に最終確認してください。<br><br>
+      AIによる分析結果は参考情報であり、最終的な営業判断・経営判断は
+      お客様ご自身の責任において行ってください。
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p class="footer-company">NANIMONO</p>
+  <p class="footer-sub">AGI Sales Intelligence Platform</p>
+  <div class="footer-line"></div>
+  <p class="footer-copy">&copy; 2026 株式会社NANIMONO. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
