@@ -27,10 +27,7 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  html {
-    scroll-behavior: smooth;
-    font-size: 16px;
-  }
+  html { scroll-behavior: smooth; font-size: 16px; }
 
   body {
     font-family: 'Noto Sans JP', sans-serif;
@@ -40,602 +37,247 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* ===== NAV ===== */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(26,26,26,0.95);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    padding: 0 32px; height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--graphite-800);
+  }
+  .nav-logo { font-size: 0.85rem; font-weight: 700; color: var(--white); letter-spacing: 0.1em; }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { color: var(--graphite-400); text-decoration: none; font-size: 0.7rem; letter-spacing: 0.1em; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ===== SLIDE (PDF page unit) ===== */
+  .slide {
+    width: 100%;
+    min-height: 100vh;
+    padding: 60px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .slide-dark { background: linear-gradient(160deg, var(--graphite-900), var(--graphite-700)); color: var(--white); }
+  .slide-graphite { background: var(--graphite-800); color: var(--white); }
+  .slide-light { background: var(--bg); color: var(--graphite-800); }
+
+  .slide-label {
+    font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 10px; font-weight: 600;
+  }
+  .slide-title {
+    font-size: 2rem; font-weight: 700; margin-bottom: 8px; line-height: 1.3;
+  }
+  .slide-subtitle {
+    font-size: 0.9rem; color: var(--graphite-400); margin-bottom: 40px; max-width: 600px;
+  }
+  .slide-dark .slide-subtitle,
+  .slide-graphite .slide-subtitle { color: var(--graphite-300); }
+
   /* ===== HERO ===== */
   .hero {
     min-height: 100vh;
     background: linear-gradient(160deg, var(--graphite-900) 0%, var(--graphite-700) 100%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 60px 24px;
-    position: relative;
-    overflow: hidden;
+    display: flex; align-items: center;
+    padding: 60px 80px;
+    position: relative; overflow: hidden;
   }
-
   .hero::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
+    content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
     background: radial-gradient(ellipse at 30% 50%, rgba(200,169,110,0.06) 0%, transparent 60%),
                 radial-gradient(ellipse at 70% 80%, rgba(200,169,110,0.04) 0%, transparent 50%);
     pointer-events: none;
   }
-
+  .hero-content { flex: 1; position: relative; z-index: 1; }
+  .hero-visual { flex: 1; display: flex; justify-content: center; align-items: center; position: relative; z-index: 1; }
   .hero-badge {
-    display: inline-block;
-    border: 1px solid var(--accent);
-    color: var(--accent);
-    padding: 6px 20px;
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin-bottom: 40px;
-    position: relative;
-    z-index: 1;
+    display: inline-block; border: 1px solid var(--accent); color: var(--accent);
+    padding: 4px 16px; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 32px;
   }
-
-  .hero-company {
-    font-size: 1rem;
-    font-weight: 300;
-    color: var(--graphite-300);
-    letter-spacing: 0.3em;
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .hero-title {
-    font-size: clamp(2.2rem, 5vw, 4rem);
-    font-weight: 900;
-    color: var(--white);
-    letter-spacing: 0.05em;
-    line-height: 1.3;
-    margin-bottom: 16px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .hero-title span {
-    color: var(--accent);
-  }
-
-  .hero-sub {
-    font-size: clamp(1rem, 2vw, 1.4rem);
-    font-weight: 300;
-    color: var(--graphite-200);
-    margin-bottom: 48px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .hero-desc {
-    max-width: 720px;
-    font-size: 0.95rem;
-    color: var(--graphite-300);
-    line-height: 2;
-    position: relative;
-    z-index: 1;
-  }
-
-  .hero-line {
-    width: 60px;
-    height: 1px;
-    background: var(--accent);
-    margin: 40px auto;
-    position: relative;
-    z-index: 1;
-  }
-
+  .hero-company { font-size: 0.9rem; font-weight: 300; color: var(--graphite-300); letter-spacing: 0.3em; margin-bottom: 16px; }
+  .hero-title { font-size: 3.2rem; font-weight: 900; color: var(--white); letter-spacing: 0.05em; line-height: 1.2; margin-bottom: 12px; }
+  .hero-title span { color: var(--accent); }
+  .hero-sub { font-size: 1.2rem; font-weight: 300; color: var(--graphite-200); margin-bottom: 32px; }
+  .hero-line { width: 60px; height: 1px; background: var(--accent); margin-bottom: 24px; }
+  .hero-desc { max-width: 480px; font-size: 0.85rem; color: var(--graphite-300); line-height: 2; }
   .hero-scroll {
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: var(--graphite-400);
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    z-index: 1;
+    position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+    color: var(--graphite-400); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; z-index: 1;
   }
-
   .hero-scroll::after {
-    content: '';
-    display: block;
-    width: 1px;
-    height: 40px;
-    background: var(--graphite-500);
-    margin: 12px auto 0;
+    content: ''; display: block; width: 1px; height: 32px;
+    background: var(--graphite-500); margin: 8px auto 0;
     animation: scrollDown 2s ease-in-out infinite;
   }
-
   @keyframes scrollDown {
     0%, 100% { opacity: 0.3; transform: scaleY(0.5); }
     50% { opacity: 1; transform: scaleY(1); }
   }
 
-  /* ===== SECTIONS ===== */
-  .section {
-    padding: 100px 24px;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
+  /* ===== SVG ILLUSTRATIONS ===== */
+  .illust { max-width: 100%; height: auto; }
+  .illust-hero { width: 380px; height: 320px; }
+  .illust-sm { width: 200px; height: 160px; }
 
-  .section-dark {
-    background: var(--graphite-900);
-    color: var(--white);
-    max-width: 100%;
-    padding: 100px 24px;
-  }
-
-  .section-dark .section-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-
-  .section-accent {
-    background: var(--graphite-800);
-    color: var(--white);
-    max-width: 100%;
-    padding: 100px 24px;
-  }
-
-  .section-accent .section-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-
-  .section-label {
-    font-size: 0.7rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 12px;
-    font-weight: 600;
-  }
-
-  .section-title {
-    font-size: clamp(1.6rem, 3vw, 2.4rem);
-    font-weight: 700;
-    margin-bottom: 16px;
-    line-height: 1.4;
-  }
-
-  .section-subtitle {
-    font-size: 1rem;
-    color: var(--graphite-400);
-    margin-bottom: 60px;
-    max-width: 680px;
-  }
-
-  .section-dark .section-subtitle,
-  .section-accent .section-subtitle {
-    color: var(--graphite-300);
-  }
+  /* ===== TWO COLUMN LAYOUT ===== */
+  .two-col { display: flex; gap: 60px; align-items: center; }
+  .two-col-text { flex: 1; }
+  .two-col-visual { flex: 1; display: flex; justify-content: center; align-items: center; }
 
   /* ===== CONCEPT ===== */
-  .concept-text {
-    font-size: 1.05rem;
-    line-height: 2.2;
-    color: var(--graphite-600);
-    max-width: 800px;
-  }
-
-  .concept-text strong {
-    color: var(--graphite-900);
-    font-weight: 600;
-  }
-
+  .concept-text { font-size: 0.95rem; line-height: 2.2; color: var(--graphite-600); }
+  .concept-text strong { color: var(--graphite-900); font-weight: 600; }
   .concept-highlight {
-    background: linear-gradient(to right, var(--accent-light), transparent);
-    padding: 24px 32px;
-    border-left: 3px solid var(--accent);
-    margin: 40px 0;
-    font-size: 1.05rem;
-    color: var(--graphite-800);
-    line-height: 2;
+    background: linear-gradient(to right, rgba(200,169,110,0.15), transparent);
+    padding: 20px 28px; border-left: 3px solid var(--accent);
+    margin-top: 28px; font-size: 0.95rem; color: var(--graphite-800); line-height: 2;
   }
 
-  /* ===== INPUT DATA ===== */
-  .input-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 24px;
-  }
-
+  /* ===== INPUT GRID ===== */
+  .input-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
   .input-card {
-    background: var(--graphite-800);
-    border: 1px solid var(--graphite-700);
-    padding: 36px 28px;
-    transition: border-color 0.3s;
+    background: var(--graphite-700); border: 1px solid var(--graphite-600);
+    padding: 28px 22px; transition: border-color 0.3s;
   }
-
-  .input-card:hover {
-    border-color: var(--accent);
-  }
-
+  .input-card:hover { border-color: var(--accent); }
   .input-card-tag {
-    display: inline-block;
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    color: var(--accent);
-    border: 1px solid var(--accent-dark);
-    padding: 3px 10px;
-    margin-bottom: 16px;
+    display: inline-block; font-size: 0.6rem; letter-spacing: 0.15em;
+    color: var(--accent); border: 1px solid var(--accent-dark); padding: 2px 8px; margin-bottom: 12px;
   }
-
-  .input-card-title {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 12px;
-    color: var(--white);
-  }
-
-  .input-card-desc {
-    font-size: 0.85rem;
-    color: var(--graphite-300);
-    line-height: 1.8;
-  }
+  .input-card-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: var(--white); }
+  .input-card-desc { font-size: 0.75rem; color: var(--graphite-300); line-height: 1.7; }
+  .input-card-icon { margin-bottom: 12px; }
 
   /* ===== FEATURES ===== */
-  .feature-block {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: 0 32px;
-    margin-bottom: 56px;
-    padding-bottom: 56px;
-    border-bottom: 1px solid var(--graphite-100);
-  }
-
-  .feature-block:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-  }
-
-  .feature-num {
-    font-size: 2.4rem;
-    font-weight: 900;
-    color: var(--accent);
-    line-height: 1;
-    text-align: center;
-  }
-
-  .feature-num-label {
-    font-size: 0.6rem;
-    color: var(--graphite-400);
-    letter-spacing: 0.1em;
-    text-align: center;
-    margin-top: 4px;
-  }
-
-  .feature-name {
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    color: var(--accent-dark);
-    margin-bottom: 4px;
-    font-weight: 600;
-  }
-
-  .feature-title {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 16px;
-    color: var(--graphite-900);
-  }
-
-  .feature-desc {
-    font-size: 0.95rem;
-    color: var(--graphite-600);
-    line-height: 2;
-    margin-bottom: 16px;
-  }
-
+  .feature-row { display: flex; gap: 48px; align-items: flex-start; margin-bottom: 0; }
+  .feature-left { flex: 0 0 80px; }
+  .feature-right { flex: 1; }
+  .feature-num { font-size: 2rem; font-weight: 900; color: var(--accent); line-height: 1; }
+  .feature-num-label { font-size: 0.55rem; color: var(--graphite-400); letter-spacing: 0.1em; margin-top: 4px; }
+  .feature-name { font-size: 0.65rem; letter-spacing: 0.15em; color: var(--accent-dark); margin-bottom: 4px; font-weight: 600; }
+  .feature-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; color: var(--graphite-900); }
+  .feature-desc { font-size: 0.85rem; color: var(--graphite-600); line-height: 1.9; margin-bottom: 10px; }
   .feature-tag {
-    display: inline-block;
-    font-size: 0.7rem;
-    background: var(--graphite-50);
-    color: var(--graphite-600);
-    padding: 4px 12px;
-    margin-right: 8px;
-    margin-bottom: 6px;
+    display: inline-block; font-size: 0.65rem; background: var(--graphite-50);
+    color: var(--graphite-600); padding: 3px 10px; margin-right: 6px; margin-bottom: 4px;
     border: 1px solid var(--graphite-100);
   }
+  .feature-tag.auto { background: rgba(200,169,110,0.1); color: var(--accent-dark); border-color: var(--accent-light); }
 
-  .feature-tag.auto {
-    background: rgba(200,169,110,0.1);
-    color: var(--accent-dark);
-    border-color: var(--accent-light);
-  }
+  .features-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .features-pair .feature-row { margin-bottom: 0; }
+
+  .feature-single { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+  .feature-single-visual { display: flex; justify-content: center; align-items: center; }
 
   /* ===== CYCLE ===== */
-  .cycle-diagram {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin: 48px 0;
-  }
-
+  .cycle-diagram { display: flex; justify-content: center; align-items: center; gap: 12px; margin: 32px 0; }
   .cycle-node {
-    background: var(--graphite-700);
-    border: 1px solid var(--graphite-600);
-    padding: 20px 24px;
-    text-align: center;
-    min-width: 160px;
-    transition: border-color 0.3s;
+    background: var(--graphite-700); border: 1px solid var(--graphite-600);
+    padding: 16px 20px; text-align: center; min-width: 140px;
   }
-
-  .cycle-node:hover {
-    border-color: var(--accent);
-  }
-
-  .cycle-node-title {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--white);
-    margin-bottom: 4px;
-  }
-
-  .cycle-node-desc {
-    font-size: 0.7rem;
-    color: var(--graphite-300);
-  }
-
-  .cycle-arrow {
-    font-size: 1.2rem;
-    color: var(--accent);
-    font-weight: 300;
-  }
+  .cycle-node-title { font-size: 0.75rem; font-weight: 600; color: var(--white); margin-bottom: 2px; }
+  .cycle-node-desc { font-size: 0.65rem; color: var(--graphite-300); }
+  .cycle-arrow { font-size: 1rem; color: var(--accent); }
 
   /* ===== MANAGEMENT ===== */
-  .mgmt-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-  }
-
-  @media (max-width: 640px) {
-    .mgmt-grid { grid-template-columns: 1fr; }
-  }
-
-  .mgmt-card {
-    border: 1px solid var(--graphite-100);
-    padding: 40px 32px;
-    background: var(--white);
-  }
-
-  .mgmt-card-icon {
-    font-size: 1.8rem;
-    margin-bottom: 16px;
-  }
-
-  .mgmt-card-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 12px;
-  }
-
-  .mgmt-card-desc {
-    font-size: 0.9rem;
-    color: var(--graphite-500);
-    line-height: 1.9;
-  }
+  .mgmt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .mgmt-card { border: 1px solid var(--graphite-100); padding: 32px 28px; background: var(--white); }
+  .mgmt-card-title { font-size: 1rem; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+  .mgmt-card-desc { font-size: 0.85rem; color: var(--graphite-500); line-height: 1.9; }
 
   /* ===== SECURITY ===== */
-  .security-list {
-    list-style: none;
+  .security-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+  .security-card {
+    background: var(--graphite-700); border: 1px solid var(--graphite-600);
+    padding: 28px 24px;
   }
-
-  .security-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    padding: 20px 0;
-    border-bottom: 1px solid var(--graphite-700);
-    font-size: 0.95rem;
-    color: var(--graphite-200);
-    line-height: 1.8;
+  .security-card-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border: 1px solid var(--accent-dark);
+    color: var(--accent); font-size: 0.7rem; font-weight: 700; margin-bottom: 14px;
   }
-
-  .security-list li:last-child {
-    border-bottom: none;
-  }
-
-  .security-icon {
-    flex-shrink: 0;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--accent-dark);
-    color: var(--accent);
-    font-size: 0.8rem;
-    font-weight: 700;
-    margin-top: 2px;
-  }
+  .security-card-title { font-size: 0.9rem; font-weight: 600; color: var(--white); margin-bottom: 8px; }
+  .security-card-desc { font-size: 0.8rem; color: var(--graphite-300); line-height: 1.7; }
 
   /* ===== DISCLAIMER ===== */
   .disclaimer {
-    background: var(--graphite-50);
-    border: 1px solid var(--graphite-100);
-    padding: 32px;
-    margin-top: 60px;
-    font-size: 0.8rem;
-    color: var(--graphite-500);
-    line-height: 1.8;
+    background: var(--graphite-50); border: 1px solid var(--graphite-100);
+    padding: 24px 28px; font-size: 0.8rem; color: var(--graphite-500); line-height: 1.8;
   }
-
-  .disclaimer-title {
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    color: var(--graphite-400);
-    margin-bottom: 8px;
-    font-weight: 600;
-  }
+  .disclaimer-title { font-size: 0.65rem; letter-spacing: 0.2em; color: var(--graphite-400); margin-bottom: 6px; font-weight: 600; }
 
   /* ===== FOOTER ===== */
-  .footer {
-    background: var(--graphite-900);
-    text-align: center;
-    padding: 60px 24px;
-    color: var(--graphite-400);
-  }
+  .footer { background: var(--graphite-900); text-align: center; padding: 48px 24px; color: var(--graphite-400); }
+  .footer-company { font-size: 1.1rem; font-weight: 700; color: var(--white); letter-spacing: 0.1em; margin-bottom: 6px; }
+  .footer-sub { font-size: 0.7rem; color: var(--graphite-500); letter-spacing: 0.15em; margin-bottom: 20px; }
+  .footer-line { width: 40px; height: 1px; background: var(--graphite-700); margin: 0 auto 20px; }
+  .footer-copy { font-size: 0.65rem; color: var(--graphite-600); }
 
-  .footer-company {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--white);
-    letter-spacing: 0.1em;
-    margin-bottom: 8px;
+  /* ===== PAGE NUMBER ===== */
+  .page-num {
+    position: absolute; bottom: 24px; right: 40px;
+    font-size: 0.6rem; color: var(--graphite-500); letter-spacing: 0.1em;
   }
+  .slide-dark .page-num,
+  .slide-graphite .page-num { color: var(--graphite-500); }
 
-  .footer-sub {
-    font-size: 0.75rem;
-    color: var(--graphite-500);
-    letter-spacing: 0.15em;
-    margin-bottom: 24px;
-  }
-
-  .footer-line {
-    width: 40px;
-    height: 1px;
-    background: var(--graphite-700);
-    margin: 0 auto 24px;
-  }
-
-  .footer-copy {
-    font-size: 0.7rem;
-    color: var(--graphite-600);
-  }
-
-  /* ===== NAV ===== */
-  .nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    background: rgba(26,26,26,0.95);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    padding: 0 32px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--graphite-800);
-  }
-
-  .nav-logo {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--white);
-    letter-spacing: 0.1em;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 28px;
-    list-style: none;
-  }
-
-  .nav-links a {
-    color: var(--graphite-400);
-    text-decoration: none;
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    transition: color 0.2s;
-  }
-
-  .nav-links a:hover {
-    color: var(--accent);
-  }
-
+  /* ===== RESPONSIVE ===== */
   @media (max-width: 768px) {
     .nav-links { display: none; }
-    .feature-block { grid-template-columns: 1fr; }
-    .feature-num { text-align: left; margin-bottom: 12px; }
-    .feature-num-label { text-align: left; }
+    .hero { flex-direction: column; padding: 80px 24px 60px; }
+    .hero-visual { display: none; }
+    .two-col { flex-direction: column; gap: 32px; }
+    .input-grid { grid-template-columns: 1fr 1fr; }
+    .features-pair { grid-template-columns: 1fr; }
+    .feature-single { grid-template-columns: 1fr; }
+    .security-grid { grid-template-columns: 1fr; }
+    .slide { padding: 40px 24px; }
     .cycle-diagram { flex-direction: column; }
     .cycle-arrow { transform: rotate(90deg); }
   }
 
-  /* ===== PRINT / PDF ===== */
+  /* ===== PRINT / PDF (Landscape A4) ===== */
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
   @media print {
-    .nav { display: none; }
-    .hero-scroll { display: none; }
+    .nav, .hero-scroll { display: none; }
 
-    /* Hero = 1ページ目 */
-    .hero {
-      min-height: auto;
-      height: 100vh;
-      padding: 60px 24px;
+    .slide {
+      width: 297mm;
+      height: 210mm;
+      min-height: 210mm;
+      max-height: 210mm;
+      padding: 28px 48px;
       page-break-after: always;
       break-after: page;
-    }
-
-    /* 各セクションの先頭でページ区切り */
-    .section,
-    .section-dark,
-    .section-accent {
-      padding: 64px 24px;
-      page-break-before: always;
-      break-before: page;
       page-break-inside: avoid;
       break-inside: avoid;
+      overflow: hidden;
     }
-
-    /* Feature 03 (Daily-Insight) の前でページ区切り */
-    .feature-block:nth-child(3) {
-      page-break-before: always;
-      break-before: page;
-      padding-top: 20px;
+    .hero {
+      width: 297mm; height: 210mm; min-height: 210mm; max-height: 210mm;
+      padding: 32px 56px;
+      page-break-after: always; break-after: page;
     }
-
-    /* Feature 05 (Lost-Analysis) の前でページ区切り */
-    .feature-block:nth-child(5) {
-      page-break-before: always;
-      break-before: page;
-      padding-top: 20px;
-    }
-
-    /* カード・ブロックの途中で切れないように */
-    .feature-block,
-    .input-card,
-    .mgmt-card,
-    .cycle-diagram,
-    .concept-highlight,
-    .disclaimer {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-
-    .security-list li {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-
-    /* フッターは最終ページに */
     .footer {
-      page-break-before: always;
-      break-before: page;
-      padding: 40px 24px;
-    }
-
-    /* Disclaimer セクションはフッターと同じページに */
-    .section:last-of-type {
-      page-break-before: always;
-      break-before: page;
+      width: 297mm; height: 210mm; min-height: 210mm; max-height: 210mm;
       page-break-after: avoid;
-      break-after: avoid;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
     }
+    .slide:last-of-type { page-break-after: avoid; }
+
+    .slide-title { font-size: 1.6rem; }
+    .hero-title { font-size: 2.6rem; }
+    .feature-desc { font-size: 0.8rem; line-height: 1.7; }
+    .input-card-desc { font-size: 0.7rem; }
   }
 </style>
 </head>
@@ -653,315 +295,512 @@
   </ul>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-badge">Confidential - Sales Document</div>
-  <p class="hero-company">株式会社NANIMONO</p>
-  <h1 class="hero-title">NANIMONO<br><span>SALES AGENT</span></h1>
-  <p class="hero-sub">AGI営業知能プラットフォーム</p>
-  <div class="hero-line"></div>
-  <p class="hero-desc">
-    トップ営業マンの思考と経験をデジタル化し、<br>
-    組織全員で共有・増幅させるための知能インフラ。
-  </p>
+<!-- PAGE 1: HERO -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <div class="hero-badge">Confidential - Sales Document</div>
+    <p class="hero-company">株式会社NANIMONO</p>
+    <h1 class="hero-title">NANIMONO<br><span>SALES AGENT</span></h1>
+    <p class="hero-sub">AGI営業知能プラットフォーム</p>
+    <div class="hero-line"></div>
+    <p class="hero-desc">
+      トップ営業マンの思考と経験をデジタル化し、<br>
+      組織全員で共有・増幅させるための知能インフラ。
+    </p>
+  </div>
+  <div class="hero-visual">
+    <svg class="illust illust-hero" viewBox="0 0 380 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Central brain/AI node -->
+      <circle cx="190" cy="140" r="52" stroke="#c8a96e" stroke-width="1.5" fill="rgba(200,169,110,0.08)"/>
+      <circle cx="190" cy="140" r="36" stroke="#c8a96e" stroke-width="0.8" fill="rgba(200,169,110,0.04)" stroke-dasharray="4 3"/>
+      <!-- AI icon -->
+      <rect x="172" y="126" width="36" height="28" rx="4" stroke="#c8a96e" stroke-width="1.2" fill="none"/>
+      <circle cx="182" cy="138" r="3" fill="#c8a96e"/>
+      <circle cx="198" cy="138" r="3" fill="#c8a96e"/>
+      <path d="M182 148 C186 152 194 152 198 148" stroke="#c8a96e" stroke-width="1" fill="none"/>
+      <!-- Person nodes -->
+      <g transform="translate(60,60)">
+        <circle cx="20" cy="16" r="8" stroke="#9a9a9a" stroke-width="1" fill="rgba(154,154,154,0.1)"/>
+        <circle cx="20" cy="10" r="4" stroke="#9a9a9a" stroke-width="0.8" fill="none"/>
+        <path d="M12 20 C12 16 28 16 28 20" stroke="#9a9a9a" stroke-width="0.8" fill="none"/>
+      </g>
+      <g transform="translate(290,40)">
+        <circle cx="20" cy="16" r="8" stroke="#9a9a9a" stroke-width="1" fill="rgba(154,154,154,0.1)"/>
+        <circle cx="20" cy="10" r="4" stroke="#9a9a9a" stroke-width="0.8" fill="none"/>
+        <path d="M12 20 C12 16 28 16 28 20" stroke="#9a9a9a" stroke-width="0.8" fill="none"/>
+      </g>
+      <g transform="translate(40,190)">
+        <circle cx="20" cy="16" r="8" stroke="#9a9a9a" stroke-width="1" fill="rgba(154,154,154,0.1)"/>
+        <circle cx="20" cy="10" r="4" stroke="#9a9a9a" stroke-width="0.8" fill="none"/>
+        <path d="M12 20 C12 16 28 16 28 20" stroke="#9a9a9a" stroke-width="0.8" fill="none"/>
+      </g>
+      <g transform="translate(300,180)">
+        <circle cx="20" cy="16" r="8" stroke="#9a9a9a" stroke-width="1" fill="rgba(154,154,154,0.1)"/>
+        <circle cx="20" cy="10" r="4" stroke="#9a9a9a" stroke-width="0.8" fill="none"/>
+        <path d="M12 20 C12 16 28 16 28 20" stroke="#9a9a9a" stroke-width="0.8" fill="none"/>
+      </g>
+      <!-- Connection lines -->
+      <line x1="96" y1="76" x2="148" y2="116" stroke="#c8a96e" stroke-width="0.6" opacity="0.5"/>
+      <line x1="310" y1="56" x2="238" y2="112" stroke="#c8a96e" stroke-width="0.6" opacity="0.5"/>
+      <line x1="76" y1="206" x2="150" y2="168" stroke="#c8a96e" stroke-width="0.6" opacity="0.5"/>
+      <line x1="320" y1="196" x2="236" y2="164" stroke="#c8a96e" stroke-width="0.6" opacity="0.5"/>
+      <!-- Data flow particles -->
+      <circle cx="120" cy="96" r="2" fill="#c8a96e" opacity="0.7"/>
+      <circle cx="270" cy="84" r="2" fill="#c8a96e" opacity="0.7"/>
+      <circle cx="112" cy="186" r="2" fill="#c8a96e" opacity="0.7"/>
+      <circle cx="278" cy="180" r="2" fill="#c8a96e" opacity="0.7"/>
+      <!-- Bottom text -->
+      <text x="190" y="260" text-anchor="middle" fill="#7a7a7a" font-size="10" font-family="Noto Sans JP" letter-spacing="0.15em">AUTONOMOUS GROWTH INTELLIGENCE</text>
+      <line x1="100" y1="275" x2="280" y2="275" stroke="#3d3d3d" stroke-width="0.5"/>
+      <text x="190" y="295" text-anchor="middle" fill="#5c5c5c" font-size="8" font-family="Noto Sans JP">営業知能の自律的進化</text>
+    </svg>
+  </div>
   <div class="hero-scroll">Scroll</div>
+  <span class="page-num">01</span>
 </section>
 
-<!-- CONCEPT -->
-<section class="section" id="concept">
-  <p class="section-label">01 — Concept</p>
-  <h2 class="section-title">プロジェクトの全体像</h2>
-  <p class="section-subtitle">自律成長する営業インテリジェンス</p>
-
-  <div class="concept-text">
-    <p>
-      本システムは、単なるマニュアル検索機ではありません。
-    </p>
-    <br>
-    <p>
-      現場の<strong>「商談録音」</strong>や<strong>「日報」</strong>から、
-      勝てる理由（成功法則）と負ける理由（課題）をAIが自動で抽出。
-      教材やスクリプトへ<strong>リアルタイムに変換し続ける</strong>、
-      自律成長型のプラットフォームです。
-    </p>
+<!-- PAGE 2: CONCEPT -->
+<section class="slide slide-light" id="concept">
+  <div class="two-col">
+    <div class="two-col-text">
+      <p class="slide-label">01 — Concept</p>
+      <h2 class="slide-title">プロジェクトの全体像</h2>
+      <p class="slide-subtitle">自律成長する営業インテリジェンス</p>
+      <div class="concept-text">
+        <p>本システムは、単なるマニュアル検索機ではありません。</p>
+        <br>
+        <p>現場の<strong>「商談録音」</strong>や<strong>「日報」</strong>から、
+        勝てる理由（成功法則）と負ける理由（課題）をAIが自動で抽出。
+        教材やスクリプトへ<strong>リアルタイムに変換し続ける</strong>、
+        自律成長型のプラットフォームです。</p>
+      </div>
+      <div class="concept-highlight">
+        営業組織の知見を<strong>蓄積 → 分析 → 変換 → 共有</strong>するサイクルを自動化し、<br>
+        組織全体の営業力を継続的に底上げします。
+      </div>
+    </div>
+    <div class="two-col-visual">
+      <svg class="illust" width="320" height="280" viewBox="0 0 320 280" fill="none">
+        <!-- Growth chart -->
+        <line x1="40" y1="240" x2="40" y2="30" stroke="#3d3d3d" stroke-width="0.8"/>
+        <line x1="40" y1="240" x2="290" y2="240" stroke="#3d3d3d" stroke-width="0.8"/>
+        <!-- Grid lines -->
+        <line x1="40" y1="190" x2="290" y2="190" stroke="#e0e0e0" stroke-width="0.3"/>
+        <line x1="40" y1="140" x2="290" y2="140" stroke="#e0e0e0" stroke-width="0.3"/>
+        <line x1="40" y1="90" x2="290" y2="90" stroke="#e0e0e0" stroke-width="0.3"/>
+        <!-- Traditional growth (gray) -->
+        <path d="M40 220 Q100 210 140 195 Q180 180 220 170 Q260 160 280 155" stroke="#9a9a9a" stroke-width="1.5" fill="none" stroke-dasharray="4 3"/>
+        <text x="282" y="152" fill="#9a9a9a" font-size="7" font-family="Noto Sans JP">従来型</text>
+        <!-- AI-powered growth (gold) -->
+        <path d="M40 220 Q80 200 120 170 Q160 130 200 90 Q240 55 280 35" stroke="#c8a96e" stroke-width="2" fill="none"/>
+        <path d="M40 240 L40 220 Q80 200 120 170 Q160 130 200 90 Q240 55 280 35 L280 240 Z" fill="rgba(200,169,110,0.06)"/>
+        <text x="282" y="32" fill="#c8a96e" font-size="7" font-weight="600" font-family="Noto Sans JP">NANIMONO</text>
+        <!-- Labels -->
+        <text x="160" y="265" text-anchor="middle" fill="#7a7a7a" font-size="8" font-family="Noto Sans JP">時間経過</text>
+        <text x="22" y="140" fill="#7a7a7a" font-size="8" font-family="Noto Sans JP" transform="rotate(-90 22 140)">営業力</text>
+        <!-- Milestone dots -->
+        <circle cx="120" cy="170" r="3" fill="#c8a96e"/>
+        <circle cx="200" cy="90" r="3" fill="#c8a96e"/>
+        <text x="120" y="163" text-anchor="middle" fill="#c8a96e" font-size="6" font-family="Noto Sans JP">AI学習開始</text>
+        <text x="200" y="83" text-anchor="middle" fill="#c8a96e" font-size="6" font-family="Noto Sans JP">自律成長</text>
+      </svg>
+    </div>
   </div>
-
-  <div class="concept-highlight">
-    営業組織の知見を<strong>蓄積 → 分析 → 変換 → 共有</strong>するサイクルを自動化し、<br>
-    組織全体の営業力を継続的に底上げします。
-  </div>
+  <span class="page-num">02</span>
 </section>
 
-<!-- INPUT DATA -->
-<section class="section-dark" id="data">
-  <div class="section-inner">
-    <p class="section-label">02 — Input Data</p>
-    <h2 class="section-title">構築に必要なインプットデータ</h2>
-    <p class="section-subtitle">4つのデータソースが、知能基盤の精度を決定します。</p>
+<!-- PAGE 3: INPUT DATA -->
+<section class="slide slide-dark" id="data">
+  <p class="slide-label">02 — Input Data</p>
+  <h2 class="slide-title">構築に必要なインプットデータ</h2>
+  <p class="slide-subtitle">4つのデータソースが、知能基盤の精度を決定します。</p>
 
-    <div class="input-grid">
-      <div class="input-card">
-        <span class="input-card-tag">Theory</span>
-        <h3 class="input-card-title">商材・キャンペーン資料</h3>
-        <p class="input-card-desc">
-          PDF/PPT形式の商品資料。正確な商品知識、最新のプラン、約款をAIの知識基盤として投入。
+  <div class="input-grid">
+    <div class="input-card">
+      <div class="input-card-icon">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <rect x="6" y="4" width="20" height="24" rx="2" stroke="#c8a96e" stroke-width="1.2"/>
+          <line x1="10" y1="10" x2="22" y2="10" stroke="#c8a96e" stroke-width="0.8" opacity="0.6"/>
+          <line x1="10" y1="14" x2="22" y2="14" stroke="#c8a96e" stroke-width="0.8" opacity="0.6"/>
+          <line x1="10" y1="18" x2="18" y2="18" stroke="#c8a96e" stroke-width="0.8" opacity="0.6"/>
+          <rect x="10" y="21" width="8" height="4" rx="1" stroke="#c8a96e" stroke-width="0.6" fill="rgba(200,169,110,0.2)"/>
+        </svg>
+      </div>
+      <span class="input-card-tag">Theory</span>
+      <h3 class="input-card-title">商材・キャンペーン資料</h3>
+      <p class="input-card-desc">PDF/PPT形式の商品資料。正確な商品知識、最新のプラン、約款をAIの知識基盤として投入。</p>
+    </div>
+    <div class="input-card">
+      <div class="input-card-icon">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <circle cx="16" cy="16" r="10" stroke="#c8a96e" stroke-width="1.2"/>
+          <polygon points="13,11 13,21 22,16" fill="rgba(200,169,110,0.3)" stroke="#c8a96e" stroke-width="0.8"/>
+          <path d="M16 4 L16 7" stroke="#c8a96e" stroke-width="0.6"/>
+          <path d="M16 25 L16 28" stroke="#c8a96e" stroke-width="0.6"/>
+        </svg>
+      </div>
+      <span class="input-card-tag">Technique</span>
+      <h3 class="input-card-title">トップ営業の商談録音</h3>
+      <p class="input-card-desc">成果を出している人の「話し方」「切り返し」「間の取り方」を音声から自動解析。</p>
+    </div>
+    <div class="input-card">
+      <div class="input-card-icon">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <rect x="4" y="6" width="24" height="18" rx="2" stroke="#c8a96e" stroke-width="1.2"/>
+          <line x1="8" y1="11" x2="20" y2="11" stroke="#c8a96e" stroke-width="0.6" opacity="0.6"/>
+          <line x1="8" y1="14" x2="24" y2="14" stroke="#c8a96e" stroke-width="0.6" opacity="0.6"/>
+          <line x1="8" y1="17" x2="16" y2="17" stroke="#c8a96e" stroke-width="0.6" opacity="0.6"/>
+          <path d="M20 20 L24 24 L28 18" stroke="#c8a96e" stroke-width="1" fill="none"/>
+        </svg>
+      </div>
+      <span class="input-card-tag">Experience</span>
+      <h3 class="input-card-title">過去の日報・Q&A履歴</h3>
+      <p class="input-card-desc">現場で実際に起きたトラブル、顧客からの鋭い質問、それへの回答をテキストで蓄積。</p>
+    </div>
+    <div class="input-card">
+      <div class="input-card-icon">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <circle cx="10" cy="10" r="4" stroke="#c8a96e" stroke-width="0.8" fill="rgba(200,169,110,0.1)"/>
+          <circle cx="22" cy="10" r="4" stroke="#c8a96e" stroke-width="0.8" fill="rgba(200,169,110,0.1)"/>
+          <circle cx="10" cy="22" r="4" stroke="#c8a96e" stroke-width="0.8" fill="rgba(200,169,110,0.1)"/>
+          <circle cx="22" cy="22" r="4" stroke="#c8a96e" stroke-width="0.8" fill="rgba(200,169,110,0.1)"/>
+          <line x1="14" y1="10" x2="18" y2="10" stroke="#c8a96e" stroke-width="0.6"/>
+          <line x1="10" y1="14" x2="10" y2="18" stroke="#c8a96e" stroke-width="0.6"/>
+          <line x1="22" y1="14" x2="22" y2="18" stroke="#c8a96e" stroke-width="0.6"/>
+          <line x1="14" y1="22" x2="18" y2="22" stroke="#c8a96e" stroke-width="0.6"/>
+        </svg>
+      </div>
+      <span class="input-card-tag">Structure</span>
+      <h3 class="input-card-title">顧客ターゲットリスト</h3>
+      <p class="input-card-desc">どの業種・属性の顧客に、どの商材を売るべきかの定義。戦略の骨格を構築。</p>
+    </div>
+  </div>
+  <span class="page-num">03</span>
+</section>
+
+<!-- PAGE 4: FEATURE 01 & 02 -->
+<section class="slide slide-light" id="features">
+  <p class="slide-label">03 — Core Features</p>
+  <h2 class="slide-title">目的別5大機能</h2>
+  <p class="slide-subtitle">選択した商材ごとに、以下の機能が連動し「ナレッジ循環サイクル」を形成します。</p>
+
+  <div class="features-pair">
+    <div class="feature-row">
+      <div class="feature-left">
+        <div class="feature-num">01</div>
+        <div class="feature-num-label">FEATURE</div>
+      </div>
+      <div class="feature-right">
+        <p class="feature-name">Quick-FAQ</p>
+        <h3 class="feature-title">基本知識チャットbot</h3>
+        <p class="feature-desc">
+          商材資料に基づいた正確な回答を即時提供。「深掘り」で得られた新しい知見が、自動で「最新FAQ」としてここに反映されます。
         </p>
+        <span class="feature-tag">即時回答</span>
+        <span class="feature-tag">資料ベース</span>
+        <span class="feature-tag auto">自動更新</span>
       </div>
-
-      <div class="input-card">
-        <span class="input-card-tag">Technique</span>
-        <h3 class="input-card-title">トップ営業の商談録音</h3>
-        <p class="input-card-desc">
-          成果を出している人の「話し方」「切り返し」「間の取り方」を音声から自動解析。
+    </div>
+    <div class="feature-row">
+      <div class="feature-left">
+        <div class="feature-num">02</div>
+        <div class="feature-num-label">FEATURE</div>
+      </div>
+      <div class="feature-right">
+        <p class="feature-name">Closing-AI</p>
+        <h3 class="feature-title">営業ノウハウチャットbot</h3>
+        <p class="feature-desc">
+          ターゲット別のスクリプト生成、反論処理を支援。録音分析で判明した「今、最も刺さるフレーズ」が自動で成功事例集に格上げされます。
         </p>
-      </div>
-
-      <div class="input-card">
-        <span class="input-card-tag">Experience</span>
-        <h3 class="input-card-title">過去の日報・Q&A履歴</h3>
-        <p class="input-card-desc">
-          現場で実際に起きたトラブル、顧客からの鋭い質問、それへの回答をテキストで蓄積。
-        </p>
-      </div>
-
-      <div class="input-card">
-        <span class="input-card-tag">Structure</span>
-        <h3 class="input-card-title">顧客ターゲットリスト</h3>
-        <p class="input-card-desc">
-          どの業種・属性の顧客に、どの商材を売るべきかの定義。戦略の骨格を構築。
-        </p>
+        <span class="feature-tag">スクリプト生成</span>
+        <span class="feature-tag">反論処理</span>
+        <span class="feature-tag auto">成功事例自動反映</span>
       </div>
     </div>
   </div>
+  <span class="page-num">04</span>
 </section>
 
-<!-- FEATURES -->
-<section class="section" id="features">
-  <p class="section-label">03 — Core Features</p>
-  <h2 class="section-title">目的別5大機能</h2>
-  <p class="section-subtitle">
-    選択した商材ごとに、以下の機能が連動し「ナレッジ循環サイクル」を形成します。
-  </p>
+<!-- PAGE 5: FEATURE 03 & 04 -->
+<section class="slide slide-light">
+  <p class="slide-label">03 — Core Features</p>
+  <h2 class="slide-title" style="margin-bottom: 32px;">目的別5大機能</h2>
 
-  <div class="feature-block">
+  <div class="features-pair">
     <div>
-      <div class="feature-num">01</div>
-      <div class="feature-num-label">FEATURE</div>
-    </div>
-    <div>
-      <p class="feature-name">Quick-FAQ</p>
-      <h3 class="feature-title">基本知識チャットbot</h3>
-      <p class="feature-desc">
-        商材資料に基づいた正確な回答を即時提供。
-        後述の「深掘り」で得られた新しい知見が、自動で「最新FAQ」としてここに反映されます。
-        常に最新の情報にアップデートされ続ける、生きたナレッジベースです。
-      </p>
-      <span class="feature-tag">即時回答</span>
-      <span class="feature-tag">資料ベース</span>
-      <span class="feature-tag auto">自動更新</span>
-    </div>
-  </div>
-
-  <div class="feature-block">
-    <div>
-      <div class="feature-num">02</div>
-      <div class="feature-num-label">FEATURE</div>
-    </div>
-    <div>
-      <p class="feature-name">Closing-AI</p>
-      <h3 class="feature-title">営業ノウハウチャットbot</h3>
-      <p class="feature-desc">
-        ターゲット別のスクリプト生成、反論処理を支援。
-        録音分析で判明した「今、最も刺さるフレーズ」が自動で「成功事例集」として格上げされ、
-        スクリプトに組み込まれます。組織の勝ちパターンが常に進化し続けます。
-      </p>
-      <span class="feature-tag">スクリプト生成</span>
-      <span class="feature-tag">反論処理</span>
-      <span class="feature-tag auto">成功事例自動反映</span>
-    </div>
-  </div>
-
-  <div class="feature-block">
-    <div>
-      <div class="feature-num">03</div>
-      <div class="feature-num-label">FEATURE</div>
-    </div>
-    <div>
-      <p class="feature-name">Daily-Insight</p>
-      <h3 class="feature-title">日報・深掘りコーチング</h3>
-      <p class="feature-desc">
-        入力された日報に対し、AIが「なぜ失注した？」「顧客の反応のどの部分に違和感があった？」と
-        執拗に深掘り質問を実施。この対話から得られた「現場の教訓」を自動で整理し、
-        「成功・失敗事例集」としてデータベースに格上げ保存。組織全体に共有します。
-      </p>
-      <span class="feature-tag">AI深掘り質問</span>
-      <span class="feature-tag">コーチング</span>
-      <span class="feature-tag auto">教訓の自動ナレッジ化</span>
-    </div>
-  </div>
-
-  <div class="feature-block">
-    <div>
-      <div class="feature-num">04</div>
-      <div class="feature-num-label">FEATURE</div>
-    </div>
-    <div>
-      <p class="feature-name">Roleplay-Studio</p>
-      <h3 class="feature-title">AIロールプレイング特訓モード</h3>
-      <p class="feature-desc">
-        失注分析の結果（個人の弱点）をAIが学習。
-        「あなたが昨日、失注したのと同じパターンの顧客」をAIが演じ、
-        克服できるまで何度でも特訓。実践に最も近いシミュレーション環境を提供します。
-      </p>
-      <span class="feature-tag">弱点特化型</span>
-      <span class="feature-tag">実践シミュレーション</span>
-      <span class="feature-tag auto">個別最適化</span>
-    </div>
-  </div>
-
-  <div class="feature-block">
-    <div>
-      <div class="feature-num">05</div>
-      <div class="feature-num-label">FEATURE</div>
-    </div>
-    <div>
-      <p class="feature-name">Lost-Analysis</p>
-      <h3 class="feature-title">録音・失注分析</h3>
-      <p class="feature-desc">
-        音声から「声のトーン」「自信のなさ」「説明不足」を特定。
-        全体の失注理由を統計化し、管理画面へ「今、組織としてこの知識が不足している」と
-        アラートを出力。個人と組織、両方の課題を可視化します。
-      </p>
-      <span class="feature-tag">音声解析</span>
-      <span class="feature-tag">失注理由の統計化</span>
-      <span class="feature-tag auto">組織課題アラート</span>
-    </div>
-  </div>
-</section>
-
-<!-- KNOWLEDGE CYCLE -->
-<section class="section-accent">
-  <div class="section-inner">
-    <p class="section-label">04 — Knowledge Cycle</p>
-    <h2 class="section-title">ナレッジ循環サイクル</h2>
-    <p class="section-subtitle">5つの機能が連動し、組織の知見が自律的に成長し続けます。</p>
-
-    <div class="cycle-diagram">
-      <div class="cycle-node">
-        <div class="cycle-node-title">商談実施</div>
-        <div class="cycle-node-desc">録音 / 日報入力</div>
-      </div>
-      <span class="cycle-arrow">&#x2192;</span>
-      <div class="cycle-node">
-        <div class="cycle-node-title">AI分析</div>
-        <div class="cycle-node-desc">成功要因 / 失注要因</div>
-      </div>
-      <span class="cycle-arrow">&#x2192;</span>
-      <div class="cycle-node">
-        <div class="cycle-node-title">ナレッジ化</div>
-        <div class="cycle-node-desc">FAQ / 事例集 更新</div>
-      </div>
-      <span class="cycle-arrow">&#x2192;</span>
-      <div class="cycle-node">
-        <div class="cycle-node-title">トレーニング</div>
-        <div class="cycle-node-desc">ロープレ / コーチング</div>
-      </div>
-      <span class="cycle-arrow">&#x2192;</span>
-      <div class="cycle-node">
-        <div class="cycle-node-title">次の商談へ</div>
-        <div class="cycle-node-desc">スキル向上</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- MANAGEMENT -->
-<section class="section" id="management">
-  <p class="section-label">05 — Management</p>
-  <h2 class="section-title">経営・マネジメント層向け</h2>
-  <p class="section-subtitle">組織の営業力をデータで可視化し、的確な意思決定を支援します。</p>
-
-  <div class="mgmt-grid">
-    <div class="mgmt-card">
-      <div class="mgmt-card-icon">&#9632;</div>
-      <h3 class="mgmt-card-title">組織ヒートマップ</h3>
-      <p class="mgmt-card-desc">
-        どのメンバー・代理店が、どのフェーズでつまづいているかをヒートマップで可視化。
-        弱点の分布が一目で把握でき、的確なリソース配分が可能になります。
-      </p>
-    </div>
-
-    <div class="mgmt-card">
-      <div class="mgmt-card-icon">&#9670;</div>
-      <h3 class="mgmt-card-title">AIレコメンド</h3>
-      <p class="mgmt-card-desc">
-        「B店には、この新しい失敗事例集を読ませて、ロープレ③を重点的にやらせるべき」
-        ——AIが具体的なアクション指示を自動生成。マネジメントの属人化を排除します。
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- SECURITY -->
-<section class="section-dark" id="security">
-  <div class="section-inner">
-    <p class="section-label">06 — Security</p>
-    <h2 class="section-title">代理店向けリスクヘッジ</h2>
-    <p class="section-subtitle">情報資産を守る多層防御を標準実装。</p>
-
-    <ul class="security-list">
-      <li>
-        <span class="security-icon">01</span>
-        <div>
-          <strong style="color: var(--white);">権限階層制御</strong><br>
-          代理店ランクにより閲覧可能な情報レベルを制限。
-          機密性の高い営業ノウハウやスクリプトを段階的に開示します。
+      <div class="feature-row">
+        <div class="feature-left">
+          <div class="feature-num">03</div>
+          <div class="feature-num-label">FEATURE</div>
         </div>
-      </li>
-      <li>
-        <span class="security-icon">02</span>
-        <div>
-          <strong style="color: var(--white);">透かし埋め込み</strong><br>
-          表示される全コンテンツにユーザーIDの電子透かしを不可視レベルで埋め込み。
-          流出元の特定を即座に可能にします。
+        <div class="feature-right">
+          <p class="feature-name">Daily-Insight</p>
+          <h3 class="feature-title">日報・深掘りコーチング</h3>
+          <p class="feature-desc">
+            AIが「なぜ失注した？」「顧客の反応のどの部分に違和感があった？」と執拗に深掘り質問。得られた「現場の教訓」を自動で整理し組織全体に共有。
+          </p>
+          <span class="feature-tag">AI深掘り質問</span>
+          <span class="feature-tag auto">教訓の自動ナレッジ化</span>
         </div>
-      </li>
-      <li>
-        <span class="security-icon">03</span>
-        <div>
-          <strong style="color: var(--white);">コピペ検知・即時停止</strong><br>
-          不正なコピー&ペースト操作を検知した場合、
-          該当アカウントを即時停止。情報流出を未然に防ぎます。
+      </div>
+    </div>
+    <div>
+      <div class="feature-row">
+        <div class="feature-left">
+          <div class="feature-num">04</div>
+          <div class="feature-num-label">FEATURE</div>
         </div>
-      </li>
-    </ul>
+        <div class="feature-right">
+          <p class="feature-name">Roleplay-Studio</p>
+          <h3 class="feature-title">AIロールプレイング特訓</h3>
+          <p class="feature-desc">
+            個人の弱点をAIが学習。「あなたが昨日、失注したのと同じパターンの顧客」をAIが演じ、克服できるまで何度でも特訓。
+          </p>
+          <span class="feature-tag">弱点特化型</span>
+          <span class="feature-tag auto">個別最適化</span>
+        </div>
+      </div>
+    </div>
   </div>
+  <span class="page-num">05</span>
 </section>
 
-<!-- DISCLAIMER -->
-<section class="section">
-  <p class="section-label">07 — Disclaimer</p>
-  <h2 class="section-title">免責・ご留意事項</h2>
-
-  <div class="disclaimer">
-    <p class="disclaimer-title">Important Notice</p>
-    <p>
-      本システムが提供する全ての回答・分析結果には、以下の免責事項が適用されます。<br><br>
-      ※サービスやキャンペーンの内容は随時変更される可能性があります。
-      最新データは必ず弊社担当者に最終確認してください。<br><br>
-      AIによる分析結果は参考情報であり、最終的な営業判断・経営判断は
-      お客様ご自身の責任において行ってください。
-    </p>
+<!-- PAGE 6: FEATURE 05 + ILLUSTRATION -->
+<section class="slide slide-light">
+  <div class="feature-single">
+    <div>
+      <p class="slide-label">03 — Core Features</p>
+      <div class="feature-row" style="margin-bottom: 0;">
+        <div class="feature-left">
+          <div class="feature-num">05</div>
+          <div class="feature-num-label">FEATURE</div>
+        </div>
+        <div class="feature-right">
+          <p class="feature-name">Lost-Analysis</p>
+          <h3 class="feature-title">録音・失注分析</h3>
+          <p class="feature-desc">
+            音声から「声のトーン」「自信のなさ」「説明不足」を特定。
+            全体の失注理由を統計化し、管理画面へ「今、組織としてこの知識が不足している」とアラートを出力。
+            個人と組織、両方の課題を可視化します。
+          </p>
+          <span class="feature-tag">音声解析</span>
+          <span class="feature-tag">失注理由の統計化</span>
+          <span class="feature-tag auto">組織課題アラート</span>
+        </div>
+      </div>
+    </div>
+    <div class="feature-single-visual">
+      <svg width="300" height="220" viewBox="0 0 300 220" fill="none">
+        <!-- Waveform -->
+        <text x="20" y="20" fill="#7a7a7a" font-size="8" font-family="Noto Sans JP" letter-spacing="0.1em">VOICE ANALYSIS</text>
+        <line x1="20" y1="28" x2="120" y2="28" stroke="#e0e0e0" stroke-width="0.5"/>
+        <!-- Audio waveform bars -->
+        <g transform="translate(20,50)">
+          <rect x="0" y="12" width="3" height="16" rx="1" fill="#c8a96e" opacity="0.4"/>
+          <rect x="6" y="6" width="3" height="28" rx="1" fill="#c8a96e" opacity="0.5"/>
+          <rect x="12" y="2" width="3" height="36" rx="1" fill="#c8a96e" opacity="0.7"/>
+          <rect x="18" y="8" width="3" height="24" rx="1" fill="#c8a96e" opacity="0.6"/>
+          <rect x="24" y="4" width="3" height="32" rx="1" fill="#c8a96e" opacity="0.8"/>
+          <rect x="30" y="10" width="3" height="20" rx="1" fill="#c8a96e" opacity="0.5"/>
+          <rect x="36" y="0" width="3" height="40" rx="1" fill="#c8a96e" opacity="0.9"/>
+          <rect x="42" y="6" width="3" height="28" rx="1" fill="#c8a96e" opacity="0.6"/>
+          <rect x="48" y="12" width="3" height="16" rx="1" fill="#c8a96e" opacity="0.4"/>
+          <rect x="54" y="4" width="3" height="32" rx="1" fill="#c8a96e" opacity="0.7"/>
+          <rect x="60" y="8" width="3" height="24" rx="1" fill="#c8a96e" opacity="0.5"/>
+          <rect x="66" y="2" width="3" height="36" rx="1" fill="#c8a96e" opacity="0.8"/>
+          <rect x="72" y="10" width="3" height="20" rx="1" fill="#c8a96e" opacity="0.5"/>
+          <rect x="78" y="6" width="3" height="28" rx="1" fill="#c8a96e" opacity="0.6"/>
+          <rect x="84" y="14" width="3" height="12" rx="1" fill="#c8a96e" opacity="0.3"/>
+        </g>
+        <!-- Analysis result bars -->
+        <text x="20" y="120" fill="#7a7a7a" font-size="8" font-family="Noto Sans JP" letter-spacing="0.1em">DETECTION RESULT</text>
+        <line x1="20" y1="128" x2="120" y2="128" stroke="#e0e0e0" stroke-width="0.5"/>
+        <text x="20" y="150" fill="#5c5c5c" font-size="8" font-family="Noto Sans JP">自信度</text>
+        <rect x="70" y="142" width="180" height="12" rx="2" fill="#f2f2f2"/>
+        <rect x="70" y="142" width="140" height="12" rx="2" fill="#c8a96e" opacity="0.7"/>
+        <text x="256" y="151" fill="#c8a96e" font-size="8" font-weight="600">78%</text>
+        <text x="20" y="174" fill="#5c5c5c" font-size="8" font-family="Noto Sans JP">説明充足</text>
+        <rect x="70" y="166" width="180" height="12" rx="2" fill="#f2f2f2"/>
+        <rect x="70" y="166" width="100" height="12" rx="2" fill="#a8894e" opacity="0.6"/>
+        <text x="256" y="175" fill="#a8894e" font-size="8" font-weight="600">56%</text>
+        <text x="20" y="198" fill="#5c5c5c" font-size="8" font-family="Noto Sans JP">切り返し</text>
+        <rect x="70" y="190" width="180" height="12" rx="2" fill="#f2f2f2"/>
+        <rect x="70" y="190" width="156" height="12" rx="2" fill="#c8a96e" opacity="0.8"/>
+        <text x="256" y="199" fill="#c8a96e" font-size="8" font-weight="600">87%</text>
+      </svg>
+    </div>
   </div>
+  <span class="page-num">06</span>
 </section>
 
-<!-- FOOTER -->
-<footer class="footer">
-  <p class="footer-company">NANIMONO</p>
-  <p class="footer-sub">AGI Sales Intelligence Platform</p>
-  <div class="footer-line"></div>
-  <p class="footer-copy">&copy; 2026 株式会社NANIMONO. All rights reserved.</p>
-</footer>
+<!-- PAGE 7: KNOWLEDGE CYCLE -->
+<section class="slide slide-graphite">
+  <p class="slide-label">04 — Knowledge Cycle</p>
+  <h2 class="slide-title">ナレッジ循環サイクル</h2>
+  <p class="slide-subtitle">5つの機能が連動し、組織の知見が自律的に成長し続けます。</p>
+
+  <div class="cycle-diagram">
+    <div class="cycle-node">
+      <div class="cycle-node-title">商談実施</div>
+      <div class="cycle-node-desc">録音 / 日報入力</div>
+    </div>
+    <span class="cycle-arrow">&#x2192;</span>
+    <div class="cycle-node">
+      <div class="cycle-node-title">AI分析</div>
+      <div class="cycle-node-desc">成功要因 / 失注要因</div>
+    </div>
+    <span class="cycle-arrow">&#x2192;</span>
+    <div class="cycle-node">
+      <div class="cycle-node-title">ナレッジ化</div>
+      <div class="cycle-node-desc">FAQ / 事例集 更新</div>
+    </div>
+    <span class="cycle-arrow">&#x2192;</span>
+    <div class="cycle-node">
+      <div class="cycle-node-title">トレーニング</div>
+      <div class="cycle-node-desc">ロープレ / コーチング</div>
+    </div>
+    <span class="cycle-arrow">&#x2192;</span>
+    <div class="cycle-node">
+      <div class="cycle-node-title">次の商談へ</div>
+      <div class="cycle-node-desc">スキル向上</div>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-top: 24px;">
+    <svg width="600" height="80" viewBox="0 0 600 80" fill="none">
+      <!-- Circular arrow -->
+      <path d="M80 60 Q80 20 300 20 Q520 20 520 60" stroke="#c8a96e" stroke-width="1" fill="none" stroke-dasharray="6 4"/>
+      <polygon points="520,55 525,65 515,65" fill="#c8a96e"/>
+      <text x="300" y="50" text-anchor="middle" fill="#c8a96e" font-size="9" font-family="Noto Sans JP" font-weight="600" letter-spacing="0.3em">CONTINUOUS IMPROVEMENT LOOP</text>
+      <text x="300" y="70" text-anchor="middle" fill="#5c5c5c" font-size="8" font-family="Noto Sans JP">各サイクルを回すたびに、AIの精度と組織の営業力が向上</text>
+    </svg>
+  </div>
+  <span class="page-num">07</span>
+</section>
+
+<!-- PAGE 8: MANAGEMENT -->
+<section class="slide slide-light" id="management">
+  <div class="two-col">
+    <div class="two-col-text">
+      <p class="slide-label">05 — Management</p>
+      <h2 class="slide-title">経営・マネジメント層向け</h2>
+      <p class="slide-subtitle">組織の営業力をデータで可視化し、的確な意思決定を支援します。</p>
+      <div class="mgmt-grid" style="grid-template-columns: 1fr;">
+        <div class="mgmt-card">
+          <h3 class="mgmt-card-title">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="6" height="6" rx="1" fill="#c8a96e" opacity="0.8"/><rect x="10" y="2" width="6" height="6" rx="1" fill="#c8a96e" opacity="0.4"/><rect x="2" y="10" width="6" height="6" rx="1" fill="#c8a96e" opacity="0.5"/><rect x="10" y="10" width="6" height="6" rx="1" fill="#c8a96e" opacity="0.9"/></svg>
+            組織ヒートマップ
+          </h3>
+          <p class="mgmt-card-desc">
+            どのメンバー・代理店が、どのフェーズでつまづいているかを可視化。弱点の分布が一目で把握できます。
+          </p>
+        </div>
+        <div class="mgmt-card">
+          <h3 class="mgmt-card-title">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2 L18 10 L10 18 L2 10 Z" stroke="#c8a96e" stroke-width="1.2" fill="rgba(200,169,110,0.1)"/><circle cx="10" cy="10" r="3" fill="#c8a96e" opacity="0.6"/></svg>
+            AIレコメンド
+          </h3>
+          <p class="mgmt-card-desc">
+            「B店には、この失敗事例集を読ませて、ロープレを重点的に」——AIが具体的なアクション指示を自動生成。
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="two-col-visual">
+      <svg width="280" height="240" viewBox="0 0 280 240" fill="none">
+        <!-- Dashboard mockup -->
+        <rect x="10" y="10" width="260" height="220" rx="6" stroke="#e0e0e0" stroke-width="1" fill="white"/>
+        <rect x="10" y="10" width="260" height="28" rx="6" fill="#1a1a1a"/>
+        <rect x="16" y="34" width="260" height="2" fill="#1a1a1a"/>
+        <circle cx="24" cy="24" r="4" fill="#c8a96e" opacity="0.8"/>
+        <circle cx="36" cy="24" r="4" fill="#5c5c5c"/>
+        <circle cx="48" cy="24" r="4" fill="#5c5c5c"/>
+        <!-- Heatmap grid -->
+        <g transform="translate(24,48)">
+          <text x="0" y="8" fill="#7a7a7a" font-size="6" font-family="Noto Sans JP">営業成績ヒートマップ</text>
+          <rect x="0" y="16" width="28" height="20" rx="2" fill="#c8a96e" opacity="0.9"/>
+          <rect x="32" y="16" width="28" height="20" rx="2" fill="#c8a96e" opacity="0.6"/>
+          <rect x="64" y="16" width="28" height="20" rx="2" fill="#c8a96e" opacity="0.3"/>
+          <rect x="96" y="16" width="28" height="20" rx="2" fill="#c8a96e" opacity="0.7"/>
+          <rect x="128" y="16" width="28" height="20" rx="2" fill="#c8a96e" opacity="0.5"/>
+          <rect x="0" y="40" width="28" height="20" rx="2" fill="#c8a96e" opacity="0.4"/>
+          <rect x="32" y="40" width="28" height="20" rx="2" fill="#c8a96e" opacity="0.8"/>
+          <rect x="64" y="40" width="28" height="20" rx="2" fill="#c8a96e" opacity="0.2"/>
+          <rect x="96" y="40" width="28" height="20" rx="2" fill="#c8a96e" opacity="0.6"/>
+          <rect x="128" y="40" width="28" height="20" rx="2" fill="#c8a96e" opacity="0.9"/>
+          <rect x="0" y="64" width="28" height="20" rx="2" fill="#c8a96e" opacity="0.7"/>
+          <rect x="32" y="64" width="28" height="20" rx="2" fill="#c8a96e" opacity="0.3"/>
+          <rect x="64" y="64" width="28" height="20" rx="2" fill="#c8a96e" opacity="0.5"/>
+          <rect x="96" y="64" width="28" height="20" rx="2" fill="#c8a96e" opacity="0.8"/>
+          <rect x="128" y="64" width="28" height="20" rx="2" fill="#c8a96e" opacity="0.4"/>
+        </g>
+        <!-- Mini chart -->
+        <g transform="translate(24,156)">
+          <text x="0" y="8" fill="#7a7a7a" font-size="6" font-family="Noto Sans JP">月次推移</text>
+          <path d="M0 60 L30 48 L60 52 L90 40 L120 30 L150 20" stroke="#c8a96e" stroke-width="1.5" fill="none"/>
+          <line x1="0" y1="60" x2="150" y2="60" stroke="#e0e0e0" stroke-width="0.5"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <span class="page-num">08</span>
+</section>
+
+<!-- PAGE 9: SECURITY -->
+<section class="slide slide-dark" id="security">
+  <p class="slide-label">06 — Security</p>
+  <h2 class="slide-title">代理店向けリスクヘッジ</h2>
+  <p class="slide-subtitle">情報資産を守る多層防御を標準実装。</p>
+
+  <div class="security-grid">
+    <div class="security-card">
+      <div class="security-card-num">01</div>
+      <h3 class="security-card-title">権限階層制御</h3>
+      <p class="security-card-desc">
+        代理店ランクにより閲覧可能な情報レベルを制限。機密性の高い営業ノウハウやスクリプトを段階的に開示します。
+      </p>
+    </div>
+    <div class="security-card">
+      <div class="security-card-num">02</div>
+      <h3 class="security-card-title">透かし埋め込み</h3>
+      <p class="security-card-desc">
+        全コンテンツにユーザーIDの電子透かしを不可視レベルで埋め込み。流出元の特定を即座に可能にします。
+      </p>
+    </div>
+    <div class="security-card">
+      <div class="security-card-num">03</div>
+      <h3 class="security-card-title">コピペ検知・即時停止</h3>
+      <p class="security-card-desc">
+        不正なコピー&amp;ペースト操作を検知した場合、該当アカウントを即時停止。情報流出を未然に防ぎます。
+      </p>
+    </div>
+  </div>
+  <span class="page-num">09</span>
+</section>
+
+<!-- PAGE 10: DISCLAIMER + FOOTER -->
+<section class="slide slide-light" style="justify-content: space-between;">
+  <div>
+    <p class="slide-label">07 — Disclaimer</p>
+    <h2 class="slide-title">免責・ご留意事項</h2>
+    <div class="disclaimer" style="margin-top: 24px;">
+      <p class="disclaimer-title">Important Notice</p>
+      <p>
+        本システムが提供する全ての回答・分析結果には、以下の免責事項が適用されます。<br><br>
+        ※サービスやキャンペーンの内容は随時変更される可能性があります。
+        最新データは必ず弊社担当者に最終確認してください。<br><br>
+        AIによる分析結果は参考情報であり、最終的な営業判断・経営判断はお客様ご自身の責任において行ってください。
+      </p>
+    </div>
+  </div>
+  <div style="text-align: center; padding: 32px 0;">
+    <p style="font-size: 1.1rem; font-weight: 700; color: var(--graphite-800); letter-spacing: 0.1em; margin-bottom: 4px;">NANIMONO</p>
+    <p style="font-size: 0.7rem; color: var(--graphite-500); letter-spacing: 0.15em; margin-bottom: 16px;">AGI Sales Intelligence Platform</p>
+    <div style="width: 40px; height: 1px; background: var(--graphite-200); margin: 0 auto 16px;"></div>
+    <p style="font-size: 0.65rem; color: var(--graphite-400);">&copy; 2026 株式会社NANIMONO. All rights reserved.</p>
+  </div>
+  <span class="page-num">10</span>
+</section>
 
 </body>
 </html>
