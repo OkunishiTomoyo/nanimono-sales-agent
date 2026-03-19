@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-graphite-950: #0d0d0d;
+  --color-graphite-900: #1a1a1a;
+  --color-graphite-800: #2a2a2a;
+  --color-graphite-700: #3a3a3a;
+  --color-graphite-600: #4a4a4a;
+  --color-graphite-500: #5c5c5c;
+  --color-graphite-400: #787878;
+  --color-graphite-300: #999999;
+  --color-graphite-200: #b8b8b8;
+  --color-graphite-100: #d9d9d9;
+  --color-graphite-50: #f0f0f0;
+
+  --color-gold-600: #a6873a;
+  --color-gold-500: #c8a96e;
+  --color-gold-400: #d4ba85;
+  --color-gold-300: #e0cc9e;
+  --color-gold-200: #ecddb7;
+  --color-gold-100: #f5edd3;
+
+  --color-background: #0d0d0d;
+  --color-foreground: #e8e8e8;
+  --color-card: #1a1a1a;
+  --color-card-hover: #2a2a2a;
+  --color-border: #2a2a2a;
+  --color-muted: #999999;
+  --color-accent: #c8a96e;
+  --color-accent-hover: #d4ba85;
+
+  --font-sans: var(--font-noto-sans-jp), "Hiragino Kaku Gothic ProN",
+    "Hiragino Sans", Meiryo, sans-serif;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-graphite-900);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-graphite-600);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-graphite-500);
+}

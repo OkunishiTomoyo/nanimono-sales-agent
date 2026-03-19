@@ -21,9 +21,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: app/package-lock.json
+
+      - name: Install dependencies
+        working-directory: app
+        run: npm ci
+
+      - name: Build Next.js app
+        working-directory: app
+        run: npm run build
+
+      - name: Prepare deploy directory
+        run: |
+          mkdir -p deploy/app
+          cp -r app/out/* deploy/app/
+          cp index.html deploy/
+          cp NANIMONO_SALES_AGENT.pdf deploy/ 2>/dev/null || true
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: deploy
       - id: deployment
         uses: actions/deploy-pages@v4
