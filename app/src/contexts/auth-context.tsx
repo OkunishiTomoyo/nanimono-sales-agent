@@ -1,6 +1,13 @@
 'use client'
 
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  type ReactNode,
+} from 'react'
 
 export type UserRole = 'field' | 'admin'
 
@@ -9,7 +16,7 @@ export interface Tenant {
   name: string
   products: string[]
   channels: string[]
-  sharedWith?: string[] // tenant IDs that share data
+  sharedWith?: string[]
 }
 
 export interface User {
@@ -23,6 +30,7 @@ interface AuthContextType {
   user: User | null
   tenant: Tenant | null
   tenants: Tenant[]
+  isLoading: boolean
   login: (username: string, password: string) => boolean
   logout: () => void
   switchTenant: (tenantId: string) => void
@@ -70,11 +78,31 @@ const MOCK_USERS: Record<string, { password: string; user: User }> = {
   },
 }
 
+const STORAGE_KEY = 'nanimono_auth'
+
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [currentTenantId, setCurrentTenantId] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Restore auth from localStorage on mount
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY)
+      if (stored) {
+        const data = JSON.parse(stored)
+        if (data.user && data.tenantId) {
+          setUser(data.user)
+          setCurrentTenantId(data.tenantId)
+        }
+      }
+    } catch {
+      // ignore
+    }
+    setIsLoading(false)
+  }, [])
 
   const tenant = currentTenantId
     ? MOCK_TENANTS.find((t) => t.id === currentTenantId) ?? null
@@ -85,6 +113,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (entry && entry.password === password) {
       setUser(entry.user)
       setCurrentTenantId(entry.user.tenantId)
+      try {
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify({ user: entry.user, tenantId: entry.user.tenantId })
+        )
+      } catch {
+        // ignore
+      }
       return true
     }
     return false
@@ -93,12 +129,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     setUser(null)
     setCurrentTenantId(null)
+    try {
+      localStorage.removeItem(STORAGE_KEY)
+    } catch {
+      // ignore
+    }
   }, [])
 
   const switchTenant = useCallback(
     (tenantId: string) => {
       if (user?.role === 'admin') {
         setCurrentTenantId(tenantId)
+        try {
+          localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify({ user, tenantId })
+          )
+        } catch {
+          // ignore
+        }
       }
     },
     [user]
@@ -106,7 +155,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, tenant, tenants: MOCK_TENANTS, login, logout, switchTenant }}
+      value={{
+        user,
+        tenant,
+        tenants: MOCK_TENANTS,
+        isLoading,
+        login,
+        logout,
+        switchTenant,
+      }}
     >
       {children}
     </AuthContext.Provider>

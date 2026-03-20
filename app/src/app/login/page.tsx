@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/auth-context'
 import { LogIn, Eye, EyeOff, AlertCircle } from 'lucide-react'
 
@@ -10,8 +9,15 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
-  const { login } = useAuth()
-  const router = useRouter()
+  const { login, user, isLoading } = useAuth()
+
+  // If already logged in, redirect to dashboard
+  useEffect(() => {
+    if (!isLoading && user) {
+      window.location.href =
+        (process.env.__NEXT_ROUTER_BASEPATH || '') + '/'
+    }
+  }, [user, isLoading])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,7 +30,9 @@ export default function LoginPage() {
 
     const success = login(username, password)
     if (success) {
-      router.push('/')
+      // Use window.location for reliable navigation in static export
+      window.location.href =
+        (process.env.__NEXT_ROUTER_BASEPATH || '') + '/'
     } else {
       setError('IDまたはパスワードが正しくありません')
     }
