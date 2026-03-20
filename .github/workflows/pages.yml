@@ -44,6 +44,13 @@ jobs:
           cp NANIMONO_SALES_AGENT.pdf deploy/ 2>/dev/null || true
           touch deploy/.nojekyll
 
+      - name: Verify _next exists
+        run: |
+          echo "=== deploy/app/_next contents ==="
+          ls -la deploy/app/_next/ || echo "MISSING _next!"
+          echo "=== deploy/.nojekyll ==="
+          ls -la deploy/.nojekyll
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
