@@ -1,9 +1,11 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Sidebar } from '@/components/layout/sidebar'
 import { Header } from '@/components/layout/header'
 import { useAuth } from '@/contexts/auth-context'
+
+const STORAGE_KEY = 'nanimono_auth'
 
 export default function DashboardLayout({
   children,
@@ -11,14 +13,26 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   const { user, isLoading } = useAuth()
+  const [checked, setChecked] = useState(false)
 
   useEffect(() => {
-    if (!isLoading && !user) {
+    // Check localStorage directly to avoid race condition with AuthProvider
+    const hasAuth = !!localStorage.getItem(STORAGE_KEY)
+    if (!hasAuth) {
+      window.location.assign('/nanimono-sales-agent/app/login')
+    } else {
+      setChecked(true)
+    }
+  }, [])
+
+  // Also handle logout: if auth was cleared after initial check
+  useEffect(() => {
+    if (!isLoading && !user && checked) {
       window.location.assign('/nanimono-sales-agent/app/login')
     }
-  }, [user, isLoading])
+  }, [user, isLoading, checked])
 
-  if (isLoading || !user) {
+  if (!checked || isLoading || !user) {
     return (
       <div className="flex items-center justify-center h-dvh bg-background">
         <div className="w-8 h-8 border-2 border-graphite-600 border-t-gold-500 rounded-full animate-spin" />
