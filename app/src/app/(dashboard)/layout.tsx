@@ -14,8 +14,7 @@ export default function DashboardLayout({
 
   useEffect(() => {
     if (!isLoading && !user) {
-      window.location.href =
-        (process.env.__NEXT_ROUTER_BASEPATH || '') + '/login'
+      window.location.assign('/nanimono-sales-agent/app/login')
     }
   }, [user, isLoading])
 

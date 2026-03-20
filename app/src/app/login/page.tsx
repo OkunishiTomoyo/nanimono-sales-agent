@@ -14,8 +14,7 @@ export default function LoginPage() {
   // If already logged in, redirect to dashboard
   useEffect(() => {
     if (!isLoading && user) {
-      window.location.href =
-        (process.env.__NEXT_ROUTER_BASEPATH || '') + '/'
+      window.location.assign('/nanimono-sales-agent/app/')
     }
   }, [user, isLoading])
 
@@ -31,8 +30,7 @@ export default function LoginPage() {
     const success = login(username, password)
     if (success) {
       // Use window.location for reliable navigation in static export
-      window.location.href =
-        (process.env.__NEXT_ROUTER_BASEPATH || '') + '/'
+      window.location.assign('/nanimono-sales-agent/app/')
     } else {
       setError('IDまたはパスワードが正しくありません')
     }
