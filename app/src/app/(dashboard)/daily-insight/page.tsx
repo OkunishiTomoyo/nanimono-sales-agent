@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import {
   CalendarDays,
   Send,
@@ -13,15 +13,56 @@ import {
   Sparkles,
   BookOpen,
   ChevronRight,
+  Route,
 } from 'lucide-react'
+import { useAuth } from '@/contexts/auth-context'
 
 type ResultType = '成約' | '検討中' | '失注' | '初回訪問'
+
+interface DynamicField {
+  key: string
+  label: string
+  type: 'number' | 'text'
+  placeholder: string
+}
+
+const CHANNEL_FIELDS: Record<string, DynamicField[]> = {
+  'テレアポ': [
+    { key: 'calls', label: 'コール数', type: 'number', placeholder: '0' },
+    { key: 'talkTime', label: '通話時間（分）', type: 'number', placeholder: '0' },
+    { key: 'appointments', label: 'アポ取得数', type: 'number', placeholder: '0' },
+    { key: 'orders', label: '受注数', type: 'number', placeholder: '0' },
+  ],
+  '飛び込み': [
+    { key: 'visits', label: '訪問件数', type: 'number', placeholder: '0' },
+    { key: 'cards', label: '名刺交換数', type: 'number', placeholder: '0' },
+    { key: 'appointments', label: 'アポ取得数', type: 'number', placeholder: '0' },
+    { key: 'orders', label: '受注数', type: 'number', placeholder: '0' },
+  ],
+  'Web反響': [
+    { key: 'leads', label: 'リード対応数', type: 'number', placeholder: '0' },
+    { key: 'deals', label: '商談化数', type: 'number', placeholder: '0' },
+    { key: 'orders', label: '受注数', type: 'number', placeholder: '0' },
+  ],
+  '紹介': [
+    { key: 'referrer', label: '紹介元', type: 'text', placeholder: '紹介者名を入力' },
+    { key: 'meetings', label: '面談数', type: 'number', placeholder: '0' },
+    { key: 'orders', label: '受注数', type: 'number', placeholder: '0' },
+  ],
+  _default: [
+    { key: 'activities', label: '活動件数', type: 'number', placeholder: '0' },
+    { key: 'deals', label: '商談数', type: 'number', placeholder: '0' },
+    { key: 'orders', label: '受注数', type: 'number', placeholder: '0' },
+  ],
+}
 
 interface ReportForm {
   date: string
   client: string
   result: ResultType
   summary: string
+  channel: string
+  channelFields: Record<string, string>
 }
 
 interface CoachingMessage {
@@ -32,6 +73,13 @@ interface CoachingMessage {
 interface Insight {
   text: string
   type: 'success' | 'improvement'
+}
+
+const CHANNEL_COACHING_PREFIX: Record<string, string> = {
+  'テレアポ': 'テレアポでの活動を振り返りましょう。',
+  '飛び込み': '飛び込み営業での訪問を振り返りましょう。',
+  'Web反響': 'Web反響対応を振り返りましょう。',
+  '紹介': '紹介営業の商談を振り返りましょう。',
 }
 
 const MOCK_COACHING_FLOWS: Record<
@@ -144,11 +192,16 @@ const MOCK_USER_RESPONSES: Record<ResultType, string[]> = {
 }
 
 export default function DailyInsightPage() {
+  const { tenant } = useAuth()
+  const channels = tenant?.channels ?? ['テレアポ']
+
   const [form, setForm] = useState<ReportForm>({
     date: new Date().toISOString().split('T')[0],
     client: '',
     result: '検討中',
     summary: '',
+    channel: channels[0],
+    channelFields: {},
   })
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [messages, setMessages] = useState<CoachingMessage[]>([])
@@ -160,6 +213,21 @@ export default function DailyInsightPage() {
   const currentFlow = MOCK_COACHING_FLOWS[form.result]
   const userResponses = MOCK_USER_RESPONSES[form.result]
 
+  const dynamicFields = useMemo(() => {
+    return CHANNEL_FIELDS[form.channel] ?? CHANNEL_FIELDS._default
+  }, [form.channel])
+
+  const handleChannelChange = (channel: string) => {
+    setForm({ ...form, channel, channelFields: {} })
+  }
+
+  const handleFieldChange = (key: string, value: string) => {
+    setForm({
+      ...form,
+      channelFields: { ...form.channelFields, [key]: value },
+    })
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.client || !form.summary) return
@@ -169,6 +237,8 @@ export default function DailyInsightPage() {
     setCurrentQuestionIndex(0)
     setShowInsights(false)
 
+    const channelPrefix = CHANNEL_COACHING_PREFIX[form.channel] || ''
+
     setTimeout(() => {
       setIsTyping(true)
       setTimeout(() => {
@@ -176,7 +246,7 @@ export default function DailyInsightPage() {
         setMessages([
           {
             role: 'ai',
-            content: `日報を受け取りました。${form.client}様との商談（${form.result}）について、いくつか深掘りさせてください。\n\n${currentFlow.questions[0]}`,
+            content: `日報を受け取りました。${channelPrefix}${form.client}様との商談（${form.result}）について、いくつか深掘りさせてください。\n\n${currentFlow.questions[0]}\n\n※最新データは必ず担当者に最終確認すること`,
           },
         ])
         setCurrentQuestionIndex(1)
@@ -206,7 +276,7 @@ export default function DailyInsightPage() {
           ...newMessages,
           {
             role: 'ai',
-            content: `${responsePrefix}${currentFlow.questions[currentQuestionIndex]}`,
+            content: `${responsePrefix}${currentFlow.questions[currentQuestionIndex]}\n\n※最新データは必ず担当者に最終確認すること`,
           },
         ])
         setCurrentQuestionIndex(currentQuestionIndex + 1)
@@ -220,7 +290,7 @@ export default function DailyInsightPage() {
           {
             role: 'ai',
             content:
-              'ありがとうございます。本日の商談を踏まえた教訓をまとめました。右側の「今日の教訓」カードをご確認ください。明日の商談に活かしていきましょう！',
+              'ありがとうございます。本日の商談を踏まえた教訓をまとめました。右側の「今日の教訓」カードをご確認ください。明日の商談に活かしていきましょう！\n\n※最新データは必ず担当者に最終確認すること',
           },
         ])
         setShowInsights(true)
@@ -266,6 +336,50 @@ export default function DailyInsightPage() {
               日報入力
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Channel Selector */}
+              <div>
+                <label className="block text-sm font-medium text-graphite-300 mb-1.5 flex items-center gap-1.5">
+                  <Route className="w-4 h-4 text-gold-500" />
+                  販路
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {channels.map((ch) => (
+                    <button
+                      key={ch}
+                      type="button"
+                      onClick={() => handleChannelChange(ch)}
+                      className={`rounded-lg px-3 py-1.5 text-sm font-medium border transition-all ${
+                        form.channel === ch
+                          ? 'border-gold-500 bg-gold-500/10 text-gold-500'
+                          : 'border-border bg-graphite-800 text-graphite-300 hover:border-gold-500/50'
+                      }`}
+                    >
+                      {ch}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Dynamic Channel Fields */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {dynamicFields.map((field) => (
+                  <div key={field.key}>
+                    <label className="block text-xs font-medium text-graphite-400 mb-1">
+                      {field.label}
+                    </label>
+                    <input
+                      type={field.type}
+                      value={form.channelFields[field.key] ?? ''}
+                      onChange={(e) =>
+                        handleFieldChange(field.key, e.target.value)
+                      }
+                      placeholder={field.placeholder}
+                      className="w-full rounded-lg border border-border bg-graphite-800 px-3 py-2 text-sm text-foreground placeholder:text-graphite-500 focus:outline-none focus:ring-2 focus:ring-gold-500/50 focus:border-gold-500 transition-colors"
+                    />
+                  </div>
+                ))}
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-graphite-300 mb-1.5">

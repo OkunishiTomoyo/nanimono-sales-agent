@@ -19,7 +19,12 @@ import {
   Scale,
   Timer,
   Search,
+  Package,
+  Route,
+  ChevronDown,
+  Brain,
 } from 'lucide-react'
+import { useAuth } from '@/contexts/auth-context'
 
 type CustomerType =
   | '価格重視型'
@@ -41,72 +46,60 @@ interface Feedback {
   improve: string
 }
 
-interface ScenarioCard {
-  type: CustomerType
-  icon: React.ReactNode
-  description: string
-  color: string
-}
-
-const SCENARIO_CARDS: ScenarioCard[] = [
-  {
-    type: '価格重視型',
-    icon: <BarChart3 className="w-6 h-6" />,
-    description: 'コストを最重視する顧客。値引き交渉や競合比較を積極的に行う。',
-    color: 'text-blue-400',
-  },
-  {
-    type: '品質重視型',
-    icon: <Shield className="w-6 h-6" />,
-    description: '品質・信頼性を重視。実績やエビデンスを求める傾向。',
-    color: 'text-emerald-400',
-  },
-  {
-    type: '比較検討型',
-    icon: <Scale className="w-6 h-6" />,
-    description: '複数社を比較検討中。論理的に判断する分析タイプ。',
-    color: 'text-purple-400',
-  },
-  {
-    type: '即決型',
-    icon: <Zap className="w-6 h-6" />,
-    description: '決断が早い。メリットが明確なら即決するが、興味がなければ即終了。',
-    color: 'text-amber-400',
-  },
-  {
-    type: '慎重型',
-    icon: <Search className="w-6 h-6" />,
-    description: 'リスクを嫌い、慎重に検討。安心材料を多く求める。',
-    color: 'text-rose-400',
-  },
+const CUSTOMER_TYPE_OPTIONS: { type: CustomerType; description: string }[] = [
+  { type: '価格重視型', description: 'コストを最重視。値引き交渉や競合比較を積極的に行う。' },
+  { type: '品質重視型', description: '品質・信頼性を重視。実績やエビデンスを求める傾向。' },
+  { type: '比較検討型', description: '複数社を比較検討中。論理的に判断する分析タイプ。' },
+  { type: '即決型', description: '決断が早い。メリットが明確なら即決。' },
+  { type: '慎重型', description: 'リスクを嫌い、慎重に検討。安心材料を多く求める。' },
 ]
 
-const CUSTOMER_OPENING: Record<CustomerType, Record<Difficulty, string>> = {
-  価格重視型: {
-    初級: 'こんにちは。御社の製品に興味はあるのですが、正直なところ予算が限られていまして...他社さんだともう少し安くなるって聞いたんですが、お値引きは可能ですか？',
-    中級: '率直に言いますと、A社さんから御社の半額近い見積もりをもらっています。同じ機能があるなら安い方を選びたいのですが、御社を選ぶメリットは何ですか？',
-    上級: '前任者から引き継いだのですが、正直この予算では御社は厳しいと思っています。年間コストを30%削減しろと上から言われていまして。他社に切り替えも検討しています。',
-  },
-  品質重視型: {
-    初級: '品質面が気になっています。御社の製品は他社と比べてどのような品質管理体制をとっていますか？',
-    中級: '過去に安い製品を導入して痛い目にあったことがあります。御社の製品で不具合が発生した場合のサポート体制を詳しく教えてください。SLAはありますか？',
-    上級: '弊社はISO認証取得企業です。御社の製品が弊社の品質基準を満たすかどうか、第三者認証や監査レポートはありますか？導入実績だけでは判断できません。',
-  },
-  比較検討型: {
-    初級: '現在3社から提案を受けています。御社の強みを簡潔に教えていただけますか？比較表を作成したいと思っています。',
-    中級: 'B社とC社の提案書はすでに受け取っています。機能比較は大体把握しているので、それ以外の差別化ポイントを教えてください。正直、機能面では大差ないように見えます。',
-    上級: '技術部門の評価ではC社が最有力候補です。経営層を説得するために御社を選ぶ理由を定量的に示してください。感覚的な話ではなく、数字で見せてほしい。',
-  },
-  即決型: {
-    初級: '時間がないので手短にお願いします。うちの課題を解決できますか？できるなら具体的にどうやって？',
-    中級: '来月までに導入完了したいんです。御社で対応できますか？できないなら他を当たります。スケジュール感を教えてください。',
-    上級: '今日中に決めたいのですが、正直まだ御社に決めきれていません。あと10分で判断します。最後のひと押しをお願いします。',
-  },
-  慎重型: {
-    初級: 'うちにはまだ早いかなと思っていて...導入のリスクが心配なんです。失敗した場合はどうなりますか？',
-    中級: '前回の会議で上長から「本当に大丈夫なのか」と聞かれまして...社内を説得するための材料が足りないんです。導入に失敗した事例はありますか？正直に教えてください。',
-    上級: '検討を始めて半年になりますが、まだ踏み切れていません。毎回新しい懸念事項が出てくるんです。今回は情報セキュリティの観点で、御社のデータ管理体制について詳しく聞きたい。',
-  },
+function generateOpening(
+  customerType: CustomerType,
+  difficulty: Difficulty,
+  product: string,
+  channel: string,
+): string {
+  const channelContext: Record<string, string> = {
+    'テレアポ': 'お電話いただいたとのことで、',
+    '飛び込み': '突然の訪問でしたが、',
+    'Web反響': 'Webで資料請求をしたのですが、',
+    '紹介': '○○さんからご紹介いただいたのですが、',
+    'セミナー': 'セミナーで御社の話を聞いて興味を持ったのですが、',
+    '展示会': '展示会で少しお話しましたが、',
+  }
+
+  const channelIntro = channelContext[channel] || ''
+
+  const base: Record<CustomerType, Record<Difficulty, string>> = {
+    価格重視型: {
+      初級: `${channelIntro}${product}に興味はあるのですが、正直なところ予算が限られていまして...他社さんだともう少し安くなるって聞いたんですが、お値引きは可能ですか？`,
+      中級: `${channelIntro}率直に言いますと、A社さんから${product}の競合製品で半額近い見積もりをもらっています。同じ機能があるなら安い方を選びたいのですが、${product}を選ぶメリットは何ですか？`,
+      上級: `${channelIntro}前任者から引き継いだのですが、正直この予算では${product}は厳しいと思っています。年間コストを30%削減しろと上から言われていまして。他社に切り替えも検討しています。`,
+    },
+    品質重視型: {
+      初級: `${channelIntro}${product}の品質面が気になっています。他社と比べてどのような品質管理体制をとっていますか？`,
+      中級: `${channelIntro}過去に安い製品を導入して痛い目にあったことがあります。${product}で不具合が発生した場合のサポート体制を詳しく教えてください。SLAはありますか？`,
+      上級: `${channelIntro}弊社はISO認証取得企業です。${product}が弊社の品質基準を満たすかどうか、第三者認証や監査レポートはありますか？導入実績だけでは判断できません。`,
+    },
+    比較検討型: {
+      初級: `${channelIntro}現在3社から提案を受けています。${product}の強みを簡潔に教えていただけますか？比較表を作成したいと思っています。`,
+      中級: `${channelIntro}B社とC社の提案書はすでに受け取っています。機能比較は大体把握しているので、${product}の差別化ポイントを教えてください。正直、機能面では大差ないように見えます。`,
+      上級: `${channelIntro}技術部門の評価ではC社が最有力候補です。経営層を説得するために${product}を選ぶ理由を定量的に示してください。感覚的な話ではなく、数字で見せてほしい。`,
+    },
+    即決型: {
+      初級: `${channelIntro}時間がないので手短にお願いします。${product}でうちの課題を解決できますか？できるなら具体的にどうやって？`,
+      中級: `${channelIntro}来月までに${product}の導入完了したいんです。対応できますか？できないなら他を当たります。スケジュール感を教えてください。`,
+      上級: `${channelIntro}今日中に決めたいのですが、正直まだ${product}に決めきれていません。あと10分で判断します。最後のひと押しをお願いします。`,
+    },
+    慎重型: {
+      初級: `${channelIntro}うちにはまだ${product}は早いかなと思っていて...導入のリスクが心配なんです。失敗した場合はどうなりますか？`,
+      中級: `${channelIntro}前回の会議で上長から「${product}は本当に大丈夫なのか」と聞かれまして...社内を説得するための材料が足りないんです。導入に失敗した事例はありますか？`,
+      上級: `${channelIntro}${product}の検討を始めて半年になりますが、まだ踏み切れていません。毎回新しい懸念事項が出てくるんです。今回は情報セキュリティの観点で、データ管理体制について詳しく聞きたい。`,
+    },
+  }
+
+  return base[customerType][difficulty]
 }
 
 const CUSTOMER_RESPONSES: Record<CustomerType, string[]> = {
@@ -209,8 +202,14 @@ function StarRating({ score }: { score: number }) {
 }
 
 export default function RoleplayPage() {
+  const { tenant } = useAuth()
+  const products = tenant?.products ?? ['UMIDAS']
+  const channels = tenant?.channels ?? ['テレアポ']
+
   const [customerType, setCustomerType] = useState<CustomerType>('価格重視型')
   const [difficulty, setDifficulty] = useState<Difficulty>('初級')
+  const [selectedProduct, setSelectedProduct] = useState(products[0])
+  const [selectedChannel, setSelectedChannel] = useState(channels[0])
   const [isStarted, setIsStarted] = useState(false)
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([])
@@ -235,7 +234,7 @@ export default function RoleplayPage() {
     setResponseCount(0)
     setCurrentFeedback(null)
 
-    const opening = CUSTOMER_OPENING[customerType][difficulty]
+    const opening = generateOpening(customerType, difficulty, selectedProduct, selectedChannel)
     setIsTyping(true)
     setTimeout(() => {
       setIsTyping(false)
@@ -322,32 +321,77 @@ export default function RoleplayPage() {
 
         {/* Scenario Selection */}
         <div className="max-w-4xl mx-auto">
+          {/* Product & Channel Selectors */}
+          <div className="mb-8">
+            <h2 className="text-lg font-semibold text-foreground mb-4">
+              商材・販路を選択
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-graphite-300 mb-1.5 flex items-center gap-1.5">
+                  <Package className="w-4 h-4 text-gold-500" />
+                  商材
+                </label>
+                <div className="relative">
+                  <select
+                    value={selectedProduct}
+                    onChange={(e) => setSelectedProduct(e.target.value)}
+                    className="w-full appearance-none rounded-lg border border-border bg-graphite-800 px-4 py-2.5 pr-10 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-gold-500/50 focus:border-gold-500 transition-colors"
+                  >
+                    {products.map((p) => (
+                      <option key={p} value={p}>{p}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-graphite-500 pointer-events-none" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-graphite-300 mb-1.5 flex items-center gap-1.5">
+                  <Route className="w-4 h-4 text-gold-500" />
+                  販路
+                </label>
+                <div className="relative">
+                  <select
+                    value={selectedChannel}
+                    onChange={(e) => setSelectedChannel(e.target.value)}
+                    className="w-full appearance-none rounded-lg border border-border bg-graphite-800 px-4 py-2.5 pr-10 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-gold-500/50 focus:border-gold-500 transition-colors"
+                  >
+                    {channels.map((ch) => (
+                      <option key={ch} value={ch}>{ch}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-graphite-500 pointer-events-none" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Customer Type Selector - Dropdown */}
           <div className="mb-8">
             <h2 className="text-lg font-semibold text-foreground mb-4">
               顧客タイプを選択
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {SCENARIO_CARDS.map((card) => (
-                <button
-                  key={card.type}
-                  onClick={() => setCustomerType(card.type)}
-                  className={`text-left rounded-xl border p-4 transition-all ${
-                    customerType === card.type
-                      ? 'border-gold-500 bg-gold-500/5 ring-1 ring-gold-500/30'
-                      : 'border-border bg-card hover:bg-card-hover hover:border-graphite-600'
-                  }`}
-                >
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className={card.color}>{card.icon}</div>
-                    <span className="font-semibold text-foreground">
-                      {card.type}
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted leading-relaxed">
-                    {card.description}
-                  </p>
-                </button>
-              ))}
+            <div className="relative">
+              <select
+                value={customerType}
+                onChange={(e) => setCustomerType(e.target.value as CustomerType)}
+                className="w-full max-w-md appearance-none rounded-lg border border-border bg-graphite-800 px-4 py-2.5 pr-10 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-gold-500/50 focus:border-gold-500 transition-colors"
+              >
+                {CUSTOMER_TYPE_OPTIONS.map((opt) => (
+                  <option key={opt.type} value={opt.type}>
+                    {opt.type} - {opt.description}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-graphite-500 pointer-events-none" />
+            </div>
+            <div className="mt-3 rounded-lg border border-border bg-graphite-800/50 p-3 max-w-md">
+              <div className="flex items-start gap-2">
+                <Brain className="w-4 h-4 text-gold-500 mt-0.5 flex-shrink-0" />
+                <p className="text-xs text-muted leading-relaxed">
+                  Sales-DNAの結果に基づき、苦手な顧客タイプを重点的に出題
+                </p>
+              </div>
             </div>
           </div>
 
@@ -397,7 +441,13 @@ export default function RoleplayPage() {
             <h1 className="text-xl font-bold text-foreground">
               Roleplay Studio
             </h1>
-            <div className="flex items-center gap-2 text-xs text-muted">
+            <div className="flex items-center gap-2 text-xs text-muted flex-wrap">
+              <span className="px-2 py-0.5 rounded-full bg-gold-500/10 border border-gold-500/20 text-gold-500">
+                {selectedProduct}
+              </span>
+              <span className="px-2 py-0.5 rounded-full bg-gold-500/10 border border-gold-500/20 text-gold-500">
+                {selectedChannel}
+              </span>
               <span className="px-2 py-0.5 rounded-full bg-graphite-800 border border-border">
                 {customerType}
               </span>

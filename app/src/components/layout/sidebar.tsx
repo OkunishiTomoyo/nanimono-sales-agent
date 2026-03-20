@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useState } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard,
   MessageSquare,
@@ -10,36 +10,57 @@ import {
   BookOpen,
   Users,
   BarChart3,
-  Settings,
   ChevronLeft,
   ChevronRight,
-} from "lucide-react";
+  Dna,
+  Briefcase,
+  TrendingUp,
+  UserCheck,
+  Library,
+  Search,
+  DollarSign,
+  FileEdit,
+} from 'lucide-react'
+import { useAuth } from '@/contexts/auth-context'
 
-const navItems = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/quick-faq", label: "Quick-FAQ", icon: MessageSquare },
-  { href: "/closing-ai", label: "Closing-AI", icon: Target },
-  { href: "/daily-insight", label: "Daily-Insight", icon: BookOpen },
-  { href: "/roleplay", label: "Roleplay", icon: Users },
-  { href: "/lost-analysis", label: "Lost-Analysis", icon: BarChart3 },
-  { href: "/management", label: "Management", icon: Settings },
-];
+const fieldNavItems = [
+  { href: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/quick-faq', label: 'Quick-FAQ', icon: MessageSquare },
+  { href: '/daily-insight', label: 'Daily-Insight', icon: BookOpen },
+  { href: '/sales-analysis', label: 'Sales-Analysis', icon: BarChart3 },
+  { href: '/closing-ai', label: 'Closing-AI', icon: Target },
+  { href: '/roleplay', label: 'Roleplay', icon: Users },
+  { href: '/daily-career', label: 'Daily-Career', icon: Briefcase },
+  { href: '/sales-dna', label: 'Sales-DNA', icon: Dna },
+]
+
+const adminNavItems = [
+  { href: '/admin', label: 'Dashboard', icon: TrendingUp },
+  { href: '/admin/members', label: 'Member Insights', icon: UserCheck },
+  { href: '/admin/knowledge', label: 'Knowledge Library', icon: Library },
+  { href: '/admin/issues', label: 'AI Issue Detective', icon: Search },
+  { href: '/admin/rewards', label: 'Reward Mgmt', icon: DollarSign },
+  { href: '/admin/report-config', label: 'Report-Config', icon: FileEdit },
+]
 
 export function Sidebar() {
-  const pathname = usePathname();
-  const [collapsed, setCollapsed] = useState(false);
+  const pathname = usePathname()
+  const [collapsed, setCollapsed] = useState(false)
+  const { user } = useAuth()
+
+  const isAdmin = user?.role === 'admin'
 
   return (
     <aside
       className={`flex flex-col h-full bg-graphite-900 border-r border-border transition-all duration-300 ${
-        collapsed ? "w-16" : "w-60"
+        collapsed ? 'w-16' : 'w-60'
       }`}
     >
       {/* Logo */}
       <div className="flex items-center justify-between h-16 px-4 border-b border-border">
         {!collapsed && (
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-lg font-bold tracking-widest text-accent">
+            <span className="text-lg font-bold tracking-widest text-gold-500">
               NANIMONO
             </span>
           </Link>
@@ -47,7 +68,7 @@ export function Sidebar() {
         <button
           onClick={() => setCollapsed(!collapsed)}
           className="p-1.5 rounded-md text-graphite-400 hover:text-foreground hover:bg-graphite-800 transition-colors"
-          aria-label={collapsed ? "サイドバーを展開" : "サイドバーを折りたたむ"}
+          aria-label={collapsed ? 'サイドバーを展開' : 'サイドバーを折りたたむ'}
         >
           {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
         </button>
@@ -55,12 +76,18 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
-        {navItems.map((item) => {
+        {/* FIELD Section */}
+        {!collapsed && (
+          <p className="text-[10px] font-semibold text-graphite-500 uppercase tracking-wider px-3 mb-2">
+            FIELD
+          </p>
+        )}
+        {fieldNavItems.map((item) => {
           const isActive =
-            item.href === "/"
-              ? pathname === "/"
-              : pathname.startsWith(item.href);
-          const Icon = item.icon;
+            item.href === '/'
+              ? pathname === '/'
+              : pathname.startsWith(item.href)
+          const Icon = item.icon
 
           return (
             <Link
@@ -68,16 +95,48 @@ export function Sidebar() {
               href={item.href}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 isActive
-                  ? "bg-accent/15 text-accent border-l-2 border-accent"
-                  : "text-graphite-300 hover:text-foreground hover:bg-graphite-800"
-              } ${collapsed ? "justify-center px-0" : ""}`}
+                  ? 'bg-gold-500/15 text-gold-500 border-l-2 border-gold-500'
+                  : 'text-graphite-300 hover:text-foreground hover:bg-graphite-800'
+              } ${collapsed ? 'justify-center px-0' : ''}`}
               title={collapsed ? item.label : undefined}
             >
               <Icon size={20} className="shrink-0" />
               {!collapsed && <span>{item.label}</span>}
             </Link>
-          );
+          )
         })}
+
+        {/* ADMIN Section */}
+        {isAdmin && (
+          <>
+            <div className="my-3 border-t border-border" />
+            {!collapsed && (
+              <p className="text-[10px] font-semibold text-graphite-500 uppercase tracking-wider px-3 mb-2">
+                ADMIN
+              </p>
+            )}
+            {adminNavItems.map((item) => {
+              const isActive = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href))
+              const Icon = item.icon
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    isActive
+                      ? 'bg-gold-500/15 text-gold-500 border-l-2 border-gold-500'
+                      : 'text-graphite-300 hover:text-foreground hover:bg-graphite-800'
+                  } ${collapsed ? 'justify-center px-0' : ''}`}
+                  title={collapsed ? item.label : undefined}
+                >
+                  <Icon size={20} className="shrink-0" />
+                  {!collapsed && <span>{item.label}</span>}
+                </Link>
+              )
+            })}
+          </>
+        )}
       </nav>
 
       {/* Footer */}
@@ -89,5 +148,5 @@ export function Sidebar() {
         </div>
       )}
     </aside>
-  );
+  )
 }

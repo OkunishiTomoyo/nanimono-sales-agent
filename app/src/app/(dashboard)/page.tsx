@@ -1,3 +1,5 @@
+'use client'
+
 import Link from "next/link";
 import {
   MessageSquare,
@@ -9,7 +11,10 @@ import {
   Brain,
   Database,
   Handshake,
+  Dna,
+  Briefcase,
 } from "lucide-react";
+import { useAuth } from "@/contexts/auth-context";
 
 const featureCards = [
   {
@@ -17,35 +22,49 @@ const featureCards = [
     icon: MessageSquare,
     title: "Quick-FAQ",
     description:
-      "顧客からのよくある質問にAIが即座に最適な回答を生成。商談中のレスポンスを劇的に向上させます。",
-  },
-  {
-    href: "/closing-ai",
-    icon: Target,
-    title: "Closing-AI",
-    description:
-      "商談データを分析し、最適なクロージング戦略を提案。成約率向上をAIがサポートします。",
+      "商材・販路別にデータを完全分離。顧客からの質問にAIが即座に最適な回答を生成します。",
   },
   {
     href: "/daily-insight",
     icon: BookOpen,
     title: "Daily-Insight",
     description:
-      "市場動向・競合情報・業界ニュースをAIが毎日分析。営業活動に必要なインサイトを提供します。",
+      "販路ごとに異なる入力項目で日報を作成。AIが「なぜ成功/失敗した？」と能動的に深掘りします。",
+  },
+  {
+    href: "/sales-analysis",
+    icon: BarChart3,
+    title: "Sales-Analysis",
+    description:
+      "受注時はKSF分析で成功要因を共有ナレッジに変換。失注時はKFF分析で上司への質問データを整形。",
+  },
+  {
+    href: "/closing-ai",
+    icon: Target,
+    title: "Closing-AI",
+    description:
+      "販路・商材別に特化したスクリプトを生成。録音から抽出した最新フレーズを自動反映します。",
   },
   {
     href: "/roleplay",
     icon: Users,
     title: "Roleplay",
     description:
-      "AIが顧客役となり商談シミュレーションを実施。実践的なトレーニングでスキルを磨きます。",
+      "AIと音声対話型のロープレ。Sales-DNAに基づき苦手な顧客タイプを重点的に練習できます。",
   },
   {
-    href: "/lost-analysis",
-    icon: BarChart3,
-    title: "Lost-Analysis",
+    href: "/daily-career",
+    icon: Briefcase,
+    title: "Daily-Career",
     description:
-      "失注案件をAIが徹底分析。パターンを特定し、次の商談での改善ポイントを明確にします。",
+      "日報の業務を「課題解決力」「分析力」等のビジネススキルに変換。就活用ポートフォリオとして蓄積。",
+  },
+  {
+    href: "/sales-dna",
+    icon: Dna,
+    title: "Sales-DNA",
+    description:
+      "16タイプ（MBTIベース）の営業タイプ診断。顧客タイプとの相性分析で個別攻略法を提示します。",
   },
 ];
 
@@ -77,15 +96,17 @@ const stats = [
 ];
 
 export default function DashboardPage() {
+  const { user, tenant } = useAuth();
+
   return (
     <div className="max-w-7xl mx-auto space-y-8">
       {/* Welcome */}
       <div>
         <h2 className="text-2xl font-bold text-foreground">
-          おかえりなさい
+          おかえりなさい、{user?.name ?? ''}さん
         </h2>
         <p className="mt-1 text-graphite-400">
-          今日もAIとともに、最高の営業成果を目指しましょう。
+          {tenant?.name} - 今日もAIとともに、最高の営業成果を目指しましょう。
         </p>
       </div>
 
