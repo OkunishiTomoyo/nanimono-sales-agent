@@ -7,19 +7,20 @@ import { useAuth } from '@/contexts/auth-context'
 
 const pageTitles: Record<string, string> = {
   '/': 'Dashboard',
-  '/quick-faq': 'Quick-FAQ',
-  '/closing-ai': 'Closing-AI',
-  '/daily-insight': 'Daily-Insight',
+  '/quick-faq': 'Quick FAQ',
+  '/smart-script': 'Smart Script',
   '/roleplay': 'Roleplay',
-  '/sales-analysis': 'Sales-Analysis',
+  '/lost-analysis': 'Lost-Analysis',
   '/daily-career': 'Daily-Career',
   '/sales-dna': 'Sales-DNA',
-  '/admin': 'Admin Dashboard',
+  '/admin': 'Global Stats',
   '/admin/members': 'Member Insights',
-  '/admin/knowledge': 'Knowledge Library',
   '/admin/issues': 'AI Issue Detective',
-  '/admin/rewards': 'Reward Management',
+  '/admin/knowledge': 'Knowledge Library',
+  '/admin/rewards': 'Reward & Mission',
+  '/admin/human-touch': 'Human Touch Focus',
   '/admin/report-config': 'Report-Config',
+  '/admin/security': 'Security & Proxy',
 }
 
 export function Header() {

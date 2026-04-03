@@ -4,15 +4,14 @@ import Link from "next/link";
 import {
   MessageSquare,
   Target,
-  BookOpen,
-  Users,
+  Mic,
   BarChart3,
+  BookOpen,
   TrendingUp,
   Brain,
   Database,
   Handshake,
   Dna,
-  Briefcase,
 } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
 
@@ -20,51 +19,44 @@ const featureCards = [
   {
     href: "/quick-faq",
     icon: MessageSquare,
-    title: "Quick-FAQ",
+    title: "Quick FAQ",
     description:
-      "商材・販路別にデータを完全分離。顧客からの質問にAIが即座に最適な回答を生成します。",
+      "資料を読み解く手間を省き、販路・商材別にAIが即座に「正しい答え」を提示。",
   },
   {
-    href: "/daily-insight",
-    icon: BookOpen,
-    title: "Daily-Insight",
-    description:
-      "販路ごとに異なる入力項目で日報を作成。AIが「なぜ成功/失敗した？」と能動的に深掘りします。",
-  },
-  {
-    href: "/sales-analysis",
-    icon: BarChart3,
-    title: "Sales-Analysis",
-    description:
-      "受注時はKSF分析で成功要因を共有ナレッジに変換。失注時はKFF分析で上司への質問データを整形。",
-  },
-  {
-    href: "/closing-ai",
+    href: "/smart-script",
     icon: Target,
-    title: "Closing-AI",
+    title: "Smart Script",
     description:
-      "販路・商材別に特化したスクリプトを生成。録音から抽出した最新フレーズを自動反映します。",
+      "録音分析から「今、最も刺さるフレーズ」を自動反映。Sales-DNAで自分仕様に自動書き換え。",
   },
   {
     href: "/roleplay",
-    icon: Users,
+    icon: Mic,
     title: "Roleplay",
     description:
-      "AIと音声対話型のロープレ。Sales-DNAに基づき苦手な顧客タイプを重点的に練習できます。",
+      "失注パターンを学習したAI顧客との擬似商談。苦手な顧客タイプを重点的に攻略。",
+  },
+  {
+    href: "/lost-analysis",
+    icon: BarChart3,
+    title: "Lost-Analysis",
+    description:
+      "商談後の振り返り。受注要因（KSF）の共有ナレッジ化、失注要因（KFF）の上司質問化。",
   },
   {
     href: "/daily-career",
-    icon: Briefcase,
+    icon: BookOpen,
     title: "Daily-Career",
     description:
-      "日報の業務を「課題解決力」「分析力」等のビジネススキルに変換。就活用ポートフォリオとして蓄積。",
+      "日報入力 + AIコーチング。蓄積されたビジネススキルを就活ポートフォリオとして可視化。",
   },
   {
     href: "/sales-dna",
     icon: Dna,
     title: "Sales-DNA",
     description:
-      "16タイプ（MBTIベース）の営業タイプ診断。顧客タイプとの相性分析で個別攻略法を提示します。",
+      "16タイプ診断で営業スタイルを分析。顧客タイプ別の攻略法と相性を可視化。",
   },
 ];
 

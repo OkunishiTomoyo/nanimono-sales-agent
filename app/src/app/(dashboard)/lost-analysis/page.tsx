@@ -124,7 +124,7 @@ const MOCK_RECENT_ANALYSES: RecentAnalysis[] = [
   { id: '6', date: '2026-03-12', client: 'デジタルソリューションズ', mode: 'kff', product: 'CloudSync' },
 ]
 
-export default function SalesAnalysisPage() {
+export default function LostAnalysisPage() {
   const { tenant } = useAuth()
   const [mode, setMode] = useState<AnalysisMode>('ksf')
   const [form, setForm] = useState<DealForm>({
@@ -170,8 +170,8 @@ export default function SalesAnalysisPage() {
             <Sparkles className="w-5 h-5 text-gold-500" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Sales-Analysis</h1>
-            <p className="text-sm text-muted">勝因・敗因分析</p>
+            <h1 className="text-2xl font-bold text-foreground">Lost-Analysis</h1>
+            <p className="text-sm text-muted">勝敗分析 - KSF共有 / KFF上司質問化</p>
           </div>
         </div>
       </div>

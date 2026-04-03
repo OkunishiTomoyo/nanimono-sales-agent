@@ -7,9 +7,10 @@ import {
   LayoutDashboard,
   MessageSquare,
   Target,
+  Mic,
+  BarChart3,
   BookOpen,
   Users,
-  BarChart3,
   ChevronLeft,
   ChevronRight,
   Dna,
@@ -18,29 +19,33 @@ import {
   UserCheck,
   Library,
   Search,
+  FileText,
+  Heart,
   DollarSign,
   FileEdit,
+  Shield,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/auth-context'
 
 const fieldNavItems = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/quick-faq', label: 'Quick-FAQ', icon: MessageSquare },
-  { href: '/daily-insight', label: 'Daily-Insight', icon: BookOpen },
-  { href: '/sales-analysis', label: 'Sales-Analysis', icon: BarChart3 },
-  { href: '/closing-ai', label: 'Closing-AI', icon: Target },
-  { href: '/roleplay', label: 'Roleplay', icon: Users },
-  { href: '/daily-career', label: 'Daily-Career', icon: Briefcase },
+  { href: '/quick-faq', label: 'Quick FAQ', icon: MessageSquare },
+  { href: '/smart-script', label: 'Smart Script', icon: Target },
+  { href: '/roleplay', label: 'Roleplay', icon: Mic },
+  { href: '/lost-analysis', label: 'Lost-Analysis', icon: BarChart3 },
+  { href: '/daily-career', label: 'Daily-Career', icon: BookOpen },
   { href: '/sales-dna', label: 'Sales-DNA', icon: Dna },
 ]
 
 const adminNavItems = [
-  { href: '/admin', label: 'Dashboard', icon: TrendingUp },
+  { href: '/admin', label: 'Global Stats', icon: TrendingUp },
   { href: '/admin/members', label: 'Member Insights', icon: UserCheck },
-  { href: '/admin/knowledge', label: 'Knowledge Library', icon: Library },
   { href: '/admin/issues', label: 'AI Issue Detective', icon: Search },
-  { href: '/admin/rewards', label: 'Reward Mgmt', icon: DollarSign },
+  { href: '/admin/knowledge', label: 'Knowledge Library', icon: Library },
+  { href: '/admin/rewards', label: 'Reward & Mission', icon: DollarSign },
+  { href: '/admin/human-touch', label: 'Human Touch', icon: Heart },
   { href: '/admin/report-config', label: 'Report-Config', icon: FileEdit },
+  { href: '/admin/security', label: 'Security & Proxy', icon: Shield },
 ]
 
 export function Sidebar() {
@@ -143,7 +148,7 @@ export function Sidebar() {
       {!collapsed && (
         <div className="p-4 border-t border-border">
           <p className="text-xs text-graphite-500 text-center">
-            AGI Sales Intelligence
+            AGI-Sales Driver
           </p>
         </div>
       )}

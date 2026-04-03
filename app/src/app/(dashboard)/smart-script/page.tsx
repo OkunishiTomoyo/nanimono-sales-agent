@@ -194,7 +194,7 @@ const TRENDING_PHRASES: Record<string, { phrase: string; source: string; effecti
   ],
 }
 
-export default function ClosingAiPage() {
+export default function SmartScriptPage() {
   const { tenant } = useAuth()
   const channels = tenant?.channels ?? ['テレアポ']
   const products = tenant?.products ?? ['UMIDAS']
@@ -269,10 +269,10 @@ export default function ClosingAiPage() {
             </div>
             <div>
               <h1 className="text-lg font-semibold text-[#1a1a1a]">
-                Closing-AI
+                Smart Script
               </h1>
               <p className="text-xs text-[#7a7a7a]">
-                営業ノウハウチャットbot - ターゲットに合わせたセールススクリプトを生成
+                録音分析に基づき「今、最も刺さる」最新スクリプトを自動生成
               </p>
             </div>
           </div>
