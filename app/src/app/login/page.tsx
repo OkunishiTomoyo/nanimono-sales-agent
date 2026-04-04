@@ -111,16 +111,20 @@ export default function LoginPage() {
             </p>
             <div className="space-y-1.5 text-xs text-graphite-400">
               <p>
-                <span className="text-graphite-300">営業:</span> tanaka / pass123
+                <span className="text-gold-500 font-semibold">現場用:</span>{' '}
+                <span className="text-graphite-300">tanaka</span> / pass123
               </p>
               <p>
-                <span className="text-graphite-300">営業:</span> sato / pass123
+                <span className="text-gold-500 font-semibold">現場用:</span>{' '}
+                <span className="text-graphite-300">sato</span> / pass123
               </p>
               <p>
-                <span className="text-graphite-300">管理者:</span> admin / admin123
+                <span className="text-emerald-400 font-semibold">管理者:</span>{' '}
+                <span className="text-graphite-300">admin</span> / admin123
               </p>
               <p>
-                <span className="text-graphite-300">管理者:</span> manager / pass123
+                <span className="text-blue-400 font-semibold">事務用:</span>{' '}
+                <span className="text-graphite-300">jimu</span> / pass123
               </p>
             </div>
           </div>

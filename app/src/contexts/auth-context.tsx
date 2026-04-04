@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from 'react'
 
-export type UserRole = 'field' | 'admin'
+export type UserRole = 'field' | 'admin' | 'office'
 
 export interface Tenant {
   id: string
@@ -24,6 +24,7 @@ export interface User {
   name: string
   role: UserRole
   tenantId: string
+  salesDnaType?: string // Sales-DNA diagnosis result
 }
 
 interface AuthContextType {
@@ -34,6 +35,7 @@ interface AuthContextType {
   login: (username: string, password: string) => boolean
   logout: () => void
   switchTenant: (tenantId: string) => void
+  setSalesDnaType: (dnaType: string) => void
 }
 
 const MOCK_TENANTS: Tenant[] = [
@@ -62,11 +64,11 @@ const MOCK_TENANTS: Tenant[] = [
 const MOCK_USERS: Record<string, { password: string; user: User }> = {
   tanaka: {
     password: 'pass123',
-    user: { id: 'u1', name: '田中太郎', role: 'field', tenantId: 'agency-a' },
+    user: { id: 'u1', name: '田中太郎', role: 'field', tenantId: 'agency-a', salesDnaType: 'logical' },
   },
   sato: {
     password: 'pass123',
-    user: { id: 'u2', name: '佐藤花子', role: 'field', tenantId: 'agency-b' },
+    user: { id: 'u2', name: '佐藤花子', role: 'field', tenantId: 'agency-b', salesDnaType: 'empathy' },
   },
   admin: {
     password: 'admin123',
@@ -75,6 +77,10 @@ const MOCK_USERS: Record<string, { password: string; user: User }> = {
   manager: {
     password: 'pass123',
     user: { id: 'u4', name: '高橋部長', role: 'admin', tenantId: 'agency-b' },
+  },
+  jimu: {
+    password: 'pass123',
+    user: { id: 'u5', name: '事務 鈴木', role: 'office', tenantId: 'agency-a' },
   },
 }
 
@@ -87,7 +93,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [currentTenantId, setCurrentTenantId] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  // Restore auth from localStorage on mount
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
@@ -141,10 +146,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (user?.role === 'admin') {
         setCurrentTenantId(tenantId)
         try {
-          localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify({ user, tenantId })
-          )
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({ user, tenantId }))
         } catch {
           // ignore
         }
@@ -153,17 +155,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [user]
   )
 
+  const setSalesDnaType = useCallback(
+    (dnaType: string) => {
+      if (user) {
+        const updated = { ...user, salesDnaType: dnaType }
+        setUser(updated)
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({ user: updated, tenantId: currentTenantId }))
+        } catch {
+          // ignore
+        }
+      }
+    },
+    [user, currentTenantId]
+  )
+
   return (
     <AuthContext.Provider
-      value={{
-        user,
-        tenant,
-        tenants: MOCK_TENANTS,
-        isLoading,
-        login,
-        logout,
-        switchTenant,
-      }}
+      value={{ user, tenant, tenants: MOCK_TENANTS, isLoading, login, logout, switchTenant, setSalesDnaType }}
     >
       {children}
     </AuthContext.Provider>

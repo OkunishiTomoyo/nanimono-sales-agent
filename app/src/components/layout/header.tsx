@@ -14,13 +14,19 @@ const pageTitles: Record<string, string> = {
   '/daily-career': 'Daily-Career',
   '/sales-dna': 'Sales-DNA',
   '/admin': 'Global Stats',
+  '/admin/daily-reports': 'メンバー日報',
   '/admin/members': 'Member Insights',
   '/admin/issues': 'AI Issue Detective',
   '/admin/knowledge': 'Knowledge Library',
   '/admin/rewards': 'Reward & Mission',
   '/admin/human-touch': 'Human Touch Focus',
   '/admin/report-config': 'Report-Config',
+  '/admin/member-mgmt': 'メンバー管理',
   '/admin/security': 'Security & Proxy',
+  '/input/knowledge': '社内知財インプット',
+  '/input/field-data': '現場生データ',
+  '/input/win-loss': '勝敗ロジック',
+  '/input/evaluation': '評価ロジック',
 }
 
 export function Header() {
@@ -80,8 +86,8 @@ export function Header() {
           </div>
         )}
 
-        {/* Current tenant badge (field user) */}
-        {user?.role === 'field' && tenant && (
+        {/* Current tenant badge (field/office user) */}
+        {(user?.role === 'field' || user?.role === 'office') && tenant && (
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-graphite-800 text-xs text-graphite-300">
             <Building2 size={12} />
             {tenant.name}
@@ -122,7 +128,7 @@ export function Header() {
                       {user.name}
                     </p>
                     <p className="text-[10px] text-graphite-400 mt-0.5">
-                      {user.role === 'admin' ? '管理者' : '営業担当'}
+                      {user.role === 'admin' ? '管理者' : user.role === 'office' ? '事務' : '営業担当'}
                     </p>
                   </div>
                 )}

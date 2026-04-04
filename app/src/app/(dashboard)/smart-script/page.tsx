@@ -106,14 +106,14 @@ const SUCCESS_STORIES: Record<string, { date: string; title: string; description
 }
 
 export default function SmartScriptPage() {
-  const { tenant } = useAuth()
+  const { tenant, user } = useAuth()
   const channels = tenant?.channels ?? ['テレアポ']
   const products = tenant?.products ?? ['UMIDAS']
 
   const [activeTab, setActiveTab] = useState<TabMode>('type-script')
   const [selectedChannel, setSelectedChannel] = useState('')
   const [selectedProduct, setSelectedProduct] = useState('')
-  const [selectedDnaType, setSelectedDnaType] = useState('logical')
+  const [selectedDnaType, setSelectedDnaType] = useState(user?.salesDnaType || 'logical')
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [isTyping, setIsTyping] = useState(false)
   const [showObjections, setShowObjections] = useState(false)
@@ -279,6 +279,9 @@ export default function SmartScriptPage() {
               <div className="flex-1">
                 <label className="block text-[10px] font-medium text-muted uppercase tracking-wider mb-1.5 flex items-center gap-1">
                   <Dna className="w-3 h-3" /> 営業タイプ
+                  {user?.salesDnaType && (
+                    <span className="text-gold-500 normal-case tracking-normal">（Sales-DNAから自動反映）</span>
+                  )}
                 </label>
                 <div className="relative">
                   <select value={selectedDnaType} onChange={(e) => setSelectedDnaType(e.target.value)}
