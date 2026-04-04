@@ -145,7 +145,7 @@ export default function KnowledgeLibraryPage() {
   const distributionScore = Math.min(100, Math.round((uniqueAuthors / 6) * 100))
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6 p-4 lg:p-8">
       {/* Header */}
       <div className="flex items-center gap-3 mb-2">
         <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gold-500/10">

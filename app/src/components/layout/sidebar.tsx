@@ -30,7 +30,7 @@ import { useAuth } from '@/contexts/auth-context'
 const fieldNavItems = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/quick-faq', label: 'Quick FAQ', icon: MessageSquare },
-  { href: '/smart-script', label: 'Smart Script', icon: Target },
+  { href: '/smart-script', label: 'Closing-AI', icon: Target },
   { href: '/roleplay', label: 'Roleplay', icon: Mic },
   { href: '/lost-analysis', label: 'Lost-Analysis', icon: BarChart3 },
   { href: '/daily-career', label: 'Daily-Career', icon: BookOpen },

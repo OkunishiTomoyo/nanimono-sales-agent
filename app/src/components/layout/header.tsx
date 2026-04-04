@@ -8,7 +8,7 @@ import { useAuth } from '@/contexts/auth-context'
 const pageTitles: Record<string, string> = {
   '/': 'Dashboard',
   '/quick-faq': 'Quick FAQ',
-  '/smart-script': 'Smart Script',
+  '/smart-script': 'Closing-AI',
   '/roleplay': 'Roleplay',
   '/lost-analysis': 'Lost-Analysis',
   '/daily-career': 'Daily-Career',

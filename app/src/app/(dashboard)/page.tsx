@@ -7,11 +7,11 @@ import {
   Mic,
   BarChart3,
   BookOpen,
-  TrendingUp,
-  Brain,
-  Database,
-  Handshake,
   Dna,
+  CheckCircle2,
+  Flame,
+  Phone,
+  Trophy,
 } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
 
@@ -21,77 +21,57 @@ const featureCards = [
     icon: MessageSquare,
     title: "Quick FAQ",
     description:
-      "資料を読み解く手間を省き、販路・商材別にAIが即座に「正しい答え」を提示。",
+      "販路・商材を選択し、最新資料からAIが即座に回答。",
   },
   {
     href: "/smart-script",
     icon: Target,
-    title: "Smart Script",
+    title: "Closing-AI",
     description:
-      "録音分析から「今、最も刺さるフレーズ」を自動反映。Sales-DNAで自分仕様に自動書き換え。",
+      "録音分析から抽出された「今、刺さるフレーズ」を自動反映。Sales-DNAに基づき、自分の性格に合った言い回しに自動書き換え。",
   },
   {
     href: "/roleplay",
     icon: Mic,
     title: "Roleplay",
     description:
-      "失注パターンを学習したAI顧客との擬似商談。苦手な顧客タイプを重点的に攻略。",
+      "AI顧客との擬似商談。苦手な失注パターンを重点的に攻略。",
   },
   {
     href: "/lost-analysis",
     icon: BarChart3,
     title: "Lost-Analysis",
     description:
-      "商談後の振り返り。受注要因（KSF）の共有ナレッジ化、失注要因（KFF）の上司質問化。",
+      "商談後の振り返り。受注要因（KSF）の共有、または失注要因（KFF）の上司への質問化。",
   },
   {
     href: "/daily-career",
     icon: BookOpen,
     title: "Daily-Career",
     description:
-      "日報入力 + AIコーチング。蓄積されたビジネススキルを就活ポートフォリオとして可視化。",
+      "日報入力 ＋ AIによる深掘り対話。蓄積されたビジネススキルの可視化。",
   },
   {
     href: "/sales-dna",
     icon: Dna,
     title: "Sales-DNA",
     description:
-      "16タイプ診断で営業スタイルを分析。顧客タイプ別の攻略法と相性を可視化。",
+      "16タイプ診断の実施と、顧客タイプ別の攻略ヒント閲覧。",
   },
 ];
 
-const stats = [
-  {
-    label: "総商談数",
-    value: "1,284",
-    change: "+12.5%",
-    icon: Handshake,
-  },
-  {
-    label: "成約率",
-    value: "34.2%",
-    change: "+3.1%",
-    icon: TrendingUp,
-  },
-  {
-    label: "AI分析件数",
-    value: "856",
-    change: "+28.4%",
-    icon: Brain,
-  },
-  {
-    label: "ナレッジ件数",
-    value: "2,431",
-    change: "+156",
-    icon: Database,
-  },
+const todayGoals = [
+  { label: '成約目標', current: 2, target: 3, unit: '件' },
+  { label: 'コール数', current: 45, target: 80, unit: '件' },
+  { label: 'アポ取得', current: 3, target: 5, unit: '件' },
+  { label: '訪問数', current: 4, target: 6, unit: '件' },
 ];
 
 export default function DashboardPage() {
   const { user, tenant } = useAuth();
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8">
+    <div className="max-w-7xl mx-auto space-y-8 p-4 lg:p-8">
       {/* Welcome */}
       <div>
         <h2 className="text-2xl font-bold text-foreground">
@@ -102,29 +82,77 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <div
-              key={stat.label}
-              className="bg-card rounded-xl p-5 border border-border hover:border-graphite-600 transition-colors"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-graphite-400">{stat.label}</span>
-                <Icon size={18} className="text-accent" />
+      {/* ===== 上半分：本日の目標と達成率 ===== */}
+      <div className="rounded-2xl border border-border bg-card p-6">
+        <div className="flex items-center gap-2 mb-5">
+          <Flame className="w-5 h-5 text-gold-500" />
+          <h3 className="text-lg font-semibold text-foreground">本日の目標</h3>
+          <span className="ml-auto text-xs text-graphite-400">
+            {new Date().toLocaleDateString('ja-JP', { month: 'long', day: 'numeric', weekday: 'short' })}
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {todayGoals.map((goal) => {
+            const rate = Math.round((goal.current / goal.target) * 100);
+            const achieved = goal.current >= goal.target;
+            return (
+              <div key={goal.label} className="rounded-xl bg-graphite-800 p-4 border border-border">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs text-graphite-400">{goal.label}</span>
+                  {achieved && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
+                </div>
+                <div className="flex items-baseline gap-1 mb-3">
+                  <span className={`text-2xl font-bold ${achieved ? 'text-emerald-400' : 'text-foreground'}`}>
+                    {goal.current}
+                  </span>
+                  <span className="text-sm text-graphite-500">/ {goal.target}{goal.unit}</span>
+                </div>
+                <div className="h-2 rounded-full bg-graphite-700 overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-700 ${
+                      achieved ? 'bg-emerald-400' : rate >= 50 ? 'bg-gold-500' : 'bg-amber-400'
+                    }`}
+                    style={{ width: `${Math.min(rate, 100)}%` }}
+                  />
+                </div>
+                <p className={`mt-1.5 text-xs font-semibold ${
+                  achieved ? 'text-emerald-400' : 'text-gold-500'
+                }`}>
+                  {rate}% 達成
+                </p>
               </div>
-              <p className="mt-2 text-2xl font-bold text-foreground">
-                {stat.value}
-              </p>
-              <p className="mt-1 text-sm text-gold-500">{stat.change}</p>
+            );
+          })}
+        </div>
+
+        {/* Quick Stats Row */}
+        <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-border">
+          <div className="flex items-center gap-3">
+            <Trophy className="w-5 h-5 text-gold-500" />
+            <div>
+              <p className="text-sm font-bold text-foreground">34.2%</p>
+              <p className="text-[10px] text-graphite-400">今月成約率</p>
             </div>
-          );
-        })}
+          </div>
+          <div className="flex items-center gap-3">
+            <Phone className="w-5 h-5 text-gold-500" />
+            <div>
+              <p className="text-sm font-bold text-foreground">1,284</p>
+              <p className="text-[10px] text-graphite-400">今月総商談数</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <BarChart3 className="w-5 h-5 text-gold-500" />
+            <div>
+              <p className="text-sm font-bold text-foreground">856</p>
+              <p className="text-[10px] text-graphite-400">AI分析件数</p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Feature cards */}
+      {/* ===== 下半分：機能一覧 ===== */}
       <div>
         <h3 className="text-lg font-semibold text-foreground mb-4">
           機能一覧

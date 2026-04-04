@@ -235,7 +235,7 @@ export default function QuickFaqPage() {
   }
 
   return (
-    <div className="flex h-dvh bg-white">
+    <div className="flex h-[calc(100vh-64px)] overflow-hidden">
       {/* Main chat area */}
       <div className="flex flex-1 flex-col">
         {/* Header */}
